@@ -6,6 +6,11 @@ import style from 'bootstrap/dist/css/bootstrap.css';
 
 class Issues extends Component{
   //Render method for the all and my issues
+  constructor(props)
+  {
+    super(props);
+  }
+
   render()
   {
     return(
@@ -23,28 +28,23 @@ class Issues extends Component{
      </tr>
    </thead>
    <tbody>
-     <tr>
-       <td>1</td>
-       <td>Mark</td>
-       <td>Otto</td>
-       <td>@mdo</td>
-       <td>@mdo</td>
-     </tr>
-     <tr>
-       <td>1</td>
-       <td>Mark</td>
-       <td>Otto</td>
-       <td>@mdo</td>
-       <td>@mdo</td>
-     </tr>
-     <tr>
-       <td>1</td>
-       <td>Mark</td>
-       <td>Otto</td>
-       <td>@mdo</td>
-       <td>@mdo</td>
-     </tr>
-   </tbody>
+   {
+     this.props.listOfIssues.map(issue => {
+      if(this.props.issueIDs.indexOf(issue.issueID) != -1)
+      {
+        return (
+         <tr>
+         <td>{issue.issueID}</td>
+         <td>{issue.date}</td>
+         <td>{issue.department}</td>
+         <td>{issue.facultyName}</td>
+         <td>{issue.status}</td>
+         </tr> )
+       }
+     })
+   }
+
+  </tbody>
  </Table>
  </Col>
  </Row>

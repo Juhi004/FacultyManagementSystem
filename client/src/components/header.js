@@ -7,7 +7,7 @@ class TopBar extends Component{
   {
     return (
       <Navbar expand="xl" bg="dark" variant="dark">
-        <Navbar.Brand>FacultyManagementSystem</Navbar.Brand>
+        <Navbar.Brand className = 'm-3'>FACULTY MANAGEMENT SYSTEM</Navbar.Brand>
       </Navbar>
     );
   }
