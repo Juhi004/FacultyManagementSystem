@@ -9,7 +9,8 @@ const issueSchema = new Schema({
   //not sure about the datat tupe Time, want a data type that will accept numbers, ":" and "-"
   time_slot: {type: Number, required: true},
   reason: {type: String, trim: true},
-  status: {type: String, enum: ['Accepted', 'Rejected', 'Pending by HOD', 'Not Responded by faculty']}
+  status: {type: String, enum: ['Accepted', 'Rejected', 'Pending by HOD', 'Not Responded by faculty']},
+  comments: {type: String}
 },{
   timestamps: true,
 });
