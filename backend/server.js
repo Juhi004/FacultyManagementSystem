@@ -16,12 +16,13 @@ mongoose.connection
 .on('error',error =>console.log("BYE"));
 
 const usersRouter = require('./routes/users');
-const apiRouter = require('./routes/api')
+const apiRouter = require('./routes/api');
+const facultyRouter = require('./routes/faculty');
 //const dashboard = require('./routes/dashboard')
 
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
-//app.use('/', main);
+app.use('/faculty', facultyRouter);
 //app.use('/dashboard');
 
 app.listen(port, () => {
