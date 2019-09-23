@@ -18,11 +18,13 @@ mongoose.connection
 const usersRouter = require('./routes/users');
 const apiRouter = require('./routes/api');
 const facultyRouter = require('./routes/faculty');
+const loginRouter = require('./routes/login');
 //const dashboard = require('./routes/dashboard')
 
 app.use('/users', usersRouter);
 app.use('/api', apiRouter);
 app.use('/faculty', facultyRouter);
+app.use('/login', loginRouter);
 //app.use('/dashboard');
 
 app.listen(port, () => {
