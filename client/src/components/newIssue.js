@@ -8,6 +8,31 @@ import Modal from 'react-bootstrap/Modal'
 import ModalDialog from 'react-bootstrap/ModalDialog'
 
 class NewIssue extends Component{
+  constructor(props)
+  {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(event){
+   event.preventDefault();
+   event.stopPropagation();
+   const form = event.target;
+   if(form === undefined || form === null)
+   {
+     console.log("Form is not present");
+   }else {
+     const issue = {
+       department : this.department.value,
+       faculty : this.faculty.value,
+       subject : this.subject.value,
+       classes : this.classes.value,
+       time : this.time.value,
+       date : this.date.value,
+     }
+     //send a request to db to check and update and return this with a complete object
+   }
+ };
 
   //Render method for the issue
   render()
@@ -18,11 +43,11 @@ class NewIssue extends Component{
         <Modal.Title>New Issue</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      <Form>
+      <Form onSubmit={this.handleSubmit}>
         {/*Select a Department*/}
         <Form.Group controlId="department">
         <Form.Label>Department</Form.Label>
-        <Form.Control as="select">
+        <Form.Control ref = {(input) => this.department = input } as="select">
         <option>1</option>
         <option>2</option>
         <option>3</option>
@@ -34,7 +59,7 @@ class NewIssue extends Component{
         {/*Select a Faculty*/}
         <Form.Group controlId="faculty">
         <Form.Label>Faculty</Form.Label>
-        <Form.Control as="select">
+        <Form.Control ref = {(input) => this.faculty = input } as="select">
         <option>1</option>
         <option>2</option>
         <option>3</option>
@@ -46,25 +71,25 @@ class NewIssue extends Component{
         {/*Enter a Subject*/}
         <Form.Group controlId="subject">
           <Form.Label>Subject</Form.Label>
-          <Form.Control placeholder="Enter subject" />
+          <Form.Control ref = {(input) => this.subject = input } placeholder="Enter subject" />
         </Form.Group>
 
         {/*Enter a Class*/}
         <Form.Group controlId="class">
           <Form.Label>Class</Form.Label>
-          <Form.Control placeholder="Enter Class" />
+          <Form.Control ref = {(input) => this.classes = input } placeholder="Enter Class" />
         </Form.Group>
 
         {/*Enter a Duration*/}
         <Form.Group controlId="Time">
           <Form.Label>Time</Form.Label>
-          <Form.Control placeholder="Enter Class Duration" />
+          <Form.Control ref = {(input) => this.time = input } placeholder="Enter Class Duration" />
         </Form.Group>
 
         {/*Enter a Date*/}
         <Form.Group controlId="date">
           <Form.Label>Date</Form.Label>
-          <Form.Control placeholder="Enter Date" />
+          <Form.Control ref = {(input) => this.date = input } placeholder="Enter Date" />
         </Form.Group>
 
         <Form.Row>

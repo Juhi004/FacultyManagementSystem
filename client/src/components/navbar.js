@@ -31,16 +31,16 @@ class NavBar extends Component{
     }
   }
   handleMyIssues(){
-    this.setState({DPRVisible : false,AllVisible : false, NewIssueVisible :false, MyVisible : !this.state.MyVisible});
+    this.setState({DPRVisible : false,AllVisible : false, NewIssueVisible :false, MyVisible :true});
   }
   handleAllIssues(){
-    this.setState({DPRVisible : false, MyVisible : false, NewIssueVisible :false, AllVisible : !this.state.AllVisible });
+    this.setState({DPRVisible : false, MyVisible : false, NewIssueVisible :false, AllVisible : true });
   }
   handleDPR(){
-    this.setState({AllVisible : false, MyVisible : false, NewIssueVisible :false, DPRVisible : !this.state.DPRVisible });
+    this.setState({AllVisible : false, MyVisible : false, NewIssueVisible :false, DPRVisible : true });
   }
   handleNewIssues(){
-    this.setState({DPRVisible : false,AllVisible : false, MyVisible : false, NewIssueVisible : !this.state.NewIssueVisible });
+    this.setState({DPRVisible : false,AllVisible : false, MyVisible : false, NewIssueVisible : true });
   }
 
   render()

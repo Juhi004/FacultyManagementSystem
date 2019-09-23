@@ -22,11 +22,31 @@ class LoginForm extends Component {
     //Make an Object here which needs to be sent as a string
     //to the API, to validate the request
     const formData = new FormData(event.target);
-    let FacultyObject = {};
-    FacultyObject.password = formData.get('password');
-    FacultyObject.email = formData.get('email');
+    const password = formData.get('password');
+    const email = formData.get('email');
 
-    if(FacultyObject.email === 'a@gmail.com' && FacultyObject.password === '123')
+    //: Juhi check this if any error
+
+    // create a new XMLHttpRequest
+    var xhr = new XMLHttpRequest()
+    let responseObject = null;
+    // get a callback when the server responds
+    xhr.addEventListener('load', () => {
+      // update the state of the component with the result here
+      responseObject = xhr.responseText;
+      console.log(xhr.responseText)
+    })
+
+    // open the request with the verb and the url
+    xhr.open('GET', 'http://localhost:5000/login')
+    //set Query Headers
+    xhr.setRequestHeader('password',password);
+    xhr.setRequestHeader('email',email);
+    // send the request
+    xhr.send();
+
+
+    if(responseObject != null)
     {
       console.log('Login SuccessFul');
       //Now Display the Dashboard

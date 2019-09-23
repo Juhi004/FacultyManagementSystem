@@ -3,6 +3,7 @@ import Table from 'react-bootstrap/Table';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import style from 'bootstrap/dist/css/bootstrap.css';
+import Issue from './issue.js';
 
 class Issues extends Component{
   //Render method for the all and my issues
@@ -10,10 +11,16 @@ class Issues extends Component{
   {
     super(props);
   }
+  state={display:false}
+  handleClick(issue)
+  {
+
+  }
 
   render()
   {
     return(
+  <React.Fragment>
   <Row>
   <Col md = {2}></Col>
   <Col md = {8}>
@@ -33,7 +40,7 @@ class Issues extends Component{
       if(this.props.issueIDs.indexOf(issue.issueID) != -1)
       {
         return (
-         <tr>
+         <tr onClick={()=>this.handleClick(issue)} key={issue.issueID}>
          <td>{issue.issueID}</td>
          <td>{issue.date}</td>
          <td>{issue.department}</td>
@@ -48,6 +55,10 @@ class Issues extends Component{
  </Table>
  </Col>
  </Row>
+ {
+   this.state.display===true
+ }
+ </React.Fragment>
     );
   }
 
