@@ -7,8 +7,8 @@ import Dashboard from './components/dashboard.js'
 const App = ()=>
 (
   <React.Fragment>
-    <LoginForm/>
-    {/*<Dashboard/>*/}
+    {/*<LoginForm/>*/}
+    <Dashboard/>
   </React.Fragment>
 );
 export default App;

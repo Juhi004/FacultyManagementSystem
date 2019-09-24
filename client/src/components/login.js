@@ -45,7 +45,6 @@ class LoginForm extends Component {
     // send the request
     xhr.send();
 
-
     if(responseObject != null)
     {
       console.log('Login SuccessFul');

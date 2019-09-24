@@ -11,10 +11,11 @@ class Issues extends Component{
   {
     super(props);
   }
-  state={display:false}
+  state={display:false};
+
   handleClick(issue)
   {
-
+    this.setState({issue,display:true});
   }
 
   render()
@@ -56,7 +57,7 @@ class Issues extends Component{
  </Col>
  </Row>
  {
-   this.state.display===true
+   this.state.display===true && <Issue details={this.state.issue}/>
  }
  </React.Fragment>
     );
