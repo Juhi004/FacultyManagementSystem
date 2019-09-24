@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 let validator = require('validator');
 
 const userSchema = new Schema({
-  username: { type: String, required: true, unique: true, trim: true, minLength: 3 },
+  username: { type: String, required: true, unique: true, trim: true, minLength: 3, refer:'Faculty' },
   password: { type: Schema.Types.Mixed, required: true, trim: true, minLength: 5},
   email: { type: String, required: true, unique: true, lowercase: true, validate: (value) => {
       return validator.isEmail(value) },
