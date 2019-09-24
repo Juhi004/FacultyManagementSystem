@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const issueSchema = new Schema({
   department: {type: String, required: true},
-  faculty: {type: String},
+  faculty: {type: String, ref:'User', required: true},
   subject: {type: String, required: true, trim: true},
   date: {type: Date, required: true},
   //not sure about the data type Time, want a data type that will accept numbers, ":" and "-"
@@ -14,7 +14,7 @@ const issueSchema = new Schema({
   comments: {type: String}
 },{
   timestamps: true,
-});
+}, { strict: false });
 
 const Issue = mongoose.model('Issue', issueSchema);
 
