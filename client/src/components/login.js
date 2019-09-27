@@ -9,8 +9,8 @@ import style from 'bootstrap/dist/css/bootstrap.css';
 
 class LoginForm extends Component {
   state = {
-    showDashboard : true,
-    showLoginForm : false,
+    showDashboard : false,
+    showLoginForm : true,
     data : {}
   }
   constructor()

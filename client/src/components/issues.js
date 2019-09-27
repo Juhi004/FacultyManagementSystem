@@ -67,9 +67,9 @@ class Issues extends Component{
          <td>{issue.department}</td>
          <td>{issue.facultyName}</td>
          <td>{issue.status}</td>
-         {this.props.data.position === "DEAN" && <Button onClick={()=>this.handleEdit(issue)} className = 'm-2'>Edit</Button>}
+         {this.props.data.position === "DEAN" && <Button onClick={()=>this.props.handleEdit(issue)} className = 'm-2'>Edit</Button>}
          {(this.props.work === "dept" && this.props.data.position === "HOD") && <Button onClick={()=>{this.props.handleApprove(issue.issueID)}} className = 'm-2'>Approve/Reject</Button>}
-         {(this.props.work === "my" && issue.status != "accepted" ) && <Button onClick={()=>this.handleReason(issue)} className = 'm-2'>Submit Reason</Button>}
+         {(this.props.work === "my" && issue.status != "accepted" ) && <Button onClick={()=>this.props.handleReason(issue)} className = 'm-2'>Submit Reason</Button>}
          </tr> )
        }
      })
