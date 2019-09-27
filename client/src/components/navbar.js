@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import style from 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/Button';
-import Issue from './issue';
 import Issues from './issues';
 import NewIssue from './newIssue';
 import Report from './report';
@@ -67,8 +66,8 @@ class NavBar extends Component{
       </Navbar>
       <Row>
       {this.state.DPRVisible ? <Report data = {this.props} /> : null}
-      {this.state.AllVisible ? <Issues issueIDs = {this.props.details.departmentIssues} listOfIssues = {this.props.details.issues} /> : null}
-      {this.state.MyVisible ? <Issues issueIDs = {this.props.details.selfIssues} listOfIssues = {this.props.details.issues} /> : null}
+      {this.state.AllVisible ? <Issues data={this.props.details} handleApprove={(issueID)=>this.props.handleApprove(issueID)} work={"dept"}/> : null}
+      {this.state.MyVisible ? <Issues data={this.props.details} work={"my"}/> : null}
       {this.state.NewIssueVisible ? <NewIssue data = {this.props} /> : null}
       </Row>
       </React.Fragment>

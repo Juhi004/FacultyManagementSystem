@@ -9,8 +9,9 @@ import style from 'bootstrap/dist/css/bootstrap.css';
 
 class LoginForm extends Component {
   state = {
-    showDashboard : false,
-    showLoginForm : true
+    showDashboard : true,
+    showLoginForm : false,
+    data : {}
   }
   constructor()
   {
@@ -35,12 +36,11 @@ class LoginForm extends Component {
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
       responseObject = xhr.responseText;
-      //display the dashboard
-      console.log("successfull");
-      this.setState({showDashboard: true,showLoginForm: false});
+      if(JSON.parse(xhr.responseText).username !== undefined)
+      this.setState({showDashboard: true,showLoginForm: false,data : responseObject});
     })
     xhr.addEventListener('error', (error) => {
-      console.log(error);
+      console.log("error",error);
     })
     xhr.addEventListener('abort', () => {
       console.log("abort");

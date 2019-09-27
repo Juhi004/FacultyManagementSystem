@@ -65,10 +65,6 @@ class Issue extends Component{
         </Form.Group>
 
         <Form.Group as={Row}>
-        {/*  {this.props.details.position === professor && (status ==""  || status =="" )&& <Button>Submit Reason</Button>}
-        {this.props.details.position === professor && (status ==""  || status =="" )&& <Button>Approve Issue</Button>}
-        */}
-        {/*Add the description and the reason tab too ! and submit button and edit too*/}
         </Form.Group>
       </Form>
       </Modal.Body>

@@ -8,24 +8,24 @@ router.route('/').get((req, res) => {
   let finalObjectToReturn = {};
 
 User.find({$and: [{email:email}, {password:password}]},function(err,data){
-    if(!err && data)
+    if(!err && data.length !==0)
     {
         finalObjectToReturn.username = data[0].username;
         finalObjectToReturn.email = data[0].email;
         finalObjectToReturn.password = data[0].password;
+        finalObjectToReturn.dashCode = data[0].dashCode;
+
         Issue.find({faculty : data[0].username},function(err,data) {
           if(!err)
           {
-              finalObjectToReturn.issue = data;
+              finalObjectToReturn.issues = data;
               res.send(JSON.stringify(finalObjectToReturn));
            }else{
-            console.log(err);
-            res.send(JSON('Error: '+err));
+            res.send(JSON.stringify({'Error': err}));
           }
         })
     }else{
-      console.log(err);
-      res.send(JSON('Error: '+err));
+      res.send(JSON.stringify({'Error':err}));
     }
 });
 
