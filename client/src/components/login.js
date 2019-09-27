@@ -38,7 +38,7 @@ class LoginForm extends Component {
     })
 
     // open the request with the verb and the url
-    xhr.open('GET', 'http://localhost:5000/login')
+    xhr.open('GET', 'https://faculty-management-system.herokuapp.com/login')
     //set Query Headers
     xhr.setRequestHeader('password',password);
     xhr.setRequestHeader('email',email);
