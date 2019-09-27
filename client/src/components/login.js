@@ -8,12 +8,15 @@ import Dashboard from './dashboard'
 import style from 'bootstrap/dist/css/bootstrap.css';
 
 class LoginForm extends Component {
+  state = {
+    showDashboard : false,
+    showLoginForm : true
+  }
   constructor()
   {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-
   handleSubmit(event)
   {
     event.preventDefault();
@@ -25,41 +28,41 @@ class LoginForm extends Component {
     const password = formData.get('password');
     const email = formData.get('email');
 
-    //: Juhi check this if any error
-
     // create a new XMLHttpRequest
-    var xhr = new XMLHttpRequest()
+    var xhr = new XMLHttpRequest();
     let responseObject = null;
     // get a callback when the server responds
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
       responseObject = xhr.responseText;
-      console.log(xhr.responseText)
+      //display the dashboard
+      console.log("successfull");
+      this.setState({showDashboard: true,showLoginForm: false});
+    })
+    xhr.addEventListener('error', (error) => {
+      console.log(error);
+    })
+    xhr.addEventListener('abort', () => {
+      console.log("abort");
     })
 
     // open the request with the verb and the url
-    xhr.open('GET', 'https://faculty-management-system.herokuapp.com/login')
+  //  xhr.open('GET', 'https://faculty-management-system.herokuapp.com/login')
+    xhr.open('GET', '/login');
     //set Query Headers
     xhr.setRequestHeader('password',password);
     xhr.setRequestHeader('email',email);
     // send the request
     xhr.send();
-
-    if(responseObject != null)
-    {
-      console.log('Login SuccessFul');
-      //Now Display the Dashboard
-    }else {
-      console.log('Login Attempt Failed');
-      //Now display the 404 Page
-    }
-  };
+};
 
   render()
   {
     return (
   <div>
-  <Row><Col md = {12}><TopBar/></Col></Row>
+  {this.state.showDashboard && <Dashboard/>}
+  {this.state.showLoginForm &&
+    <div><Row><Col md = {12}><TopBar/></Col></Row>
   <Row>
   <Col md={4}></Col>
   <Col md={4}>
@@ -87,7 +90,8 @@ class LoginForm extends Component {
     </Row>
   </Form>
   </Col>
-  </Row>
+  </Row></div>
+}
   </div>
     );
   }

@@ -24,7 +24,7 @@ const loginRouter = require('./routes/login');
 //const dashboard = require('./routes/dashboard')
 
 //this is for the npm build
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
 });
 
