@@ -66,8 +66,8 @@ class NavBar extends Component{
       </Navbar>
       <Row>
       {this.state.DPRVisible ? <Report data = {this.props} /> : null}
-      {this.state.AllVisible ? <Issues data={this.props.details} handleApprove={(issueID)=>this.props.handleApprove(issueID)} handleEdit={(issueID)=>this.props.handleEdit(issueID)} work={"dept"}/> : null}
-      {this.state.MyVisible ? <Issues data={this.props.details} work={"my"} handleReason={(issueID)=>this.props.handleReason(issueID)} /> : null}
+      {this.state.AllVisible ? <Issues className='m-2' data={this.props.details} handleApprove={(issueID)=>this.props.handleApprove(issueID)} handleEdit={(issueID)=>this.props.handleEdit(issueID)} work={"dept"}/> : null}
+      {this.state.MyVisible ? <Issues className='m-2' data={this.props.details} work={"my"} handleReason={(issueID)=>this.props.handleReason(issueID)} /> : null}
       {this.state.NewIssueVisible ? <NewIssue data = {this.props} /> : null}
       </Row>
       </React.Fragment>

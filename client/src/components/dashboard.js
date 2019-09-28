@@ -1,6 +1,4 @@
 import React, {Component} from 'react'
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
 import style from 'bootstrap/dist/css/bootstrap.css';
 import TopBar from './header';
 import NavBar from './navbar';
@@ -11,6 +9,8 @@ class Dashboard extends Component{
   {
     super();
     this.handleApprove = this.handleApprove.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
+    this.handleReason = this.handleReason.bind(this);
     this.state = {
       facultyName : "Jap Leen" ,
       department : "CSE",
@@ -49,6 +49,14 @@ class Dashboard extends Component{
       ]
     }
   }
+  handleEdit(issueID)
+  {
+
+  }
+  handleReason(issueID)
+  {
+
+  }
   handleApprove(issueID)
   {
     //Obviously add code here to change the database
@@ -67,7 +75,7 @@ class Dashboard extends Component{
     return (
       <React.Fragment>
       <TopBar/>
-      <NavBar details={this.state} handleApprove={(issueID)=>this.handleApprove(issueID)}/>
+      <NavBar details={this.state} handleApprove={(issueID)=>this.handleApprove(issueID)} handleReason={(issueID)=>this.handleReason(issueID)} handleEdit={(issueID)=>this.handleEdit(issueID)}/>
       </React.Fragment>
     );
   }

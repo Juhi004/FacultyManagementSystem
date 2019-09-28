@@ -5,6 +5,8 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import style from 'bootstrap/dist/css/bootstrap.css';
 import Issue from './issue.js';
+import Modal from 'react-bootstrap/Modal'
+import ModalDialog from 'react-bootstrap/ModalDialog'
 
 class Issues extends Component{
   //Render method for the all and my issues
@@ -14,8 +16,9 @@ class Issues extends Component{
     this.handleEdit = this.handleEdit.bind(this);
     this.handleReason = this.handleReason.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.submitReason = this.submitReason.bind(this);
   }
-  state={display:false};
+  state={display:false,displayReason:false};
 
   handleEdit(issue)
   {
@@ -24,16 +27,15 @@ class Issues extends Component{
 
   handleReason(issue)
   {
-
+    this.setState({issue,displayReason: true,display:false});
   }
-
-  handleApprove(issue)
+  submitReason(issue)
   {
-    console.log(this,issue);
+    this.props.handleReason(issue);
   }
-
-  handleClick(issue)
+  handleClick(issue,target)
   {
+    if(target.nodeName !== "BUTTON")
     this.setState({issue,display:true});
   }
 
@@ -61,7 +63,7 @@ class Issues extends Component{
       if((this.props.work === "my" && this.props.data.facultyName === issue.facultyName )|| (this.props.work==="dept" && this.props.data.department === issue.department))
       {
         return (
-         <tr onClick={()=>this.handleClick(issue)} key={issue.issueID}>
+         <tr onClick={(e)=>{this.handleClick(issue,e.target)}} key={issue.issueID}>
          <td>{issue.issueID}</td>
          <td>{issue.date}</td>
          <td>{issue.department}</td>
@@ -69,7 +71,7 @@ class Issues extends Component{
          <td>{issue.status}</td>
          {this.props.data.position === "DEAN" && <Button onClick={()=>this.props.handleEdit(issue)} className = 'm-2'>Edit</Button>}
          {(this.props.work === "dept" && this.props.data.position === "HOD") && <Button onClick={()=>{this.props.handleApprove(issue.issueID)}} className = 'm-2'>Approve/Reject</Button>}
-         {(this.props.work === "my" && issue.status != "accepted" ) && <Button onClick={()=>this.props.handleReason(issue)} className = 'm-2'>Submit Reason</Button>}
+         {(this.props.work === "my" && issue.status !== "accepted" ) && <Button onClick={()=>this.handleReason(issue)} className = 'm-2'>Submit Reason</Button>}
          </tr> )
        }
      })
@@ -82,6 +84,19 @@ class Issues extends Component{
  {
    this.state.display===true && <Issue details={this.state.issue}/>
  }
+ {
+   this.state.displayReason===true &&
+    <div>
+    <Modal.Dialog>
+    <Modal.Header closeButton={true}>Reason For Delay!</Modal.Header>
+    <Modal.Body>
+    <input type ="text"></input><br></br>
+    <Button onClick={()=>this.submitReason(this.state.issue)}>Add Reason</Button>
+    <Button>Discard</Button>
+    </Modal.Body>
+    </Modal.Dialog>
+    </div>
+  }
  </React.Fragment>
     );
   }
