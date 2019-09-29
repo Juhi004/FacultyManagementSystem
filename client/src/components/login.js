@@ -4,13 +4,17 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import TopBar from './header';
-import Dashboard from './dashboard'
+import Dashboard from './dashboard';
 import style from 'bootstrap/dist/css/bootstrap.css';
+import Alert from 'react-bootstrap/Alert';
 
 class LoginForm extends Component {
+  //change this state : NO
   state = {
     showDashboard : false,
     showLoginForm : true,
+    showLoader : false,
+    showAlert : false,
     data : {}
   }
   constructor()
@@ -20,6 +24,7 @@ class LoginForm extends Component {
   }
   handleSubmit(event)
   {
+    this.setState({showLoader:true});
     event.preventDefault();
     event.stopPropagation();
 
@@ -37,13 +42,17 @@ class LoginForm extends Component {
       // update the state of the component with the result here
       responseObject = xhr.responseText;
       if(JSON.parse(xhr.responseText).username !== undefined)
-      this.setState({showDashboard: true,showLoginForm: false,data : responseObject});
+      this.setState({showDashboard: true,showLoginForm: false,showLoader:false,data : responseObject});
+      else
+      this.setState({showLoader:false,showAlert:true});
     })
     xhr.addEventListener('error', (error) => {
       console.log("error",error);
+      this.setState({showLoader:false,showAlert:true});
     })
     xhr.addEventListener('abort', () => {
       console.log("abort");
+      this.setState({showLoader:false,showAlert:true});
     })
 
     // open the request with the verb and the url
@@ -60,6 +69,13 @@ class LoginForm extends Component {
   {
     return (
   <div>
+  {this.state.showAlert === true &&
+    <Alert variant="danger" onClose={() => this.setState({showAlert:false})} dismissible>
+        <Alert.Heading>Error</Alert.Heading>
+        Username and Password combo may be wrong
+      </Alert>
+    }
+  {this.state.showLoader === true&& <div class="rollTheLoader"><div class="lds-roller">Loading<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>}
   {this.state.showDashboard && <Dashboard/>}
   {this.state.showLoginForm &&
     <div><Row><Col md = {12}><TopBar/></Col></Row>

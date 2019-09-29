@@ -17,9 +17,20 @@ class Issues extends Component{
     this.handleReason = this.handleReason.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.submitReason = this.submitReason.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
   state={display:false,displayReason:false};
 
+  closeModal(target,str)
+  {
+    if((target.nodeName==="SPAN" || target.nodeName==="BUTTON" ) )
+    {
+      if(str==="ISSUE")
+      this.setState({display:false});
+      else
+      this.setState({displayReason:false});
+    }
+  }
   handleEdit(issue)
   {
 
@@ -29,14 +40,15 @@ class Issues extends Component{
   {
     this.setState({issue,displayReason: true,display:false});
   }
-  submitReason(issue)
+  submitReason(issue,value)
   {
-    this.props.handleReason(issue);
+    this.setState({displayReason: false})
+    this.props.handleReason(issue,value);
   }
   handleClick(issue,target)
   {
     if(target.nodeName !== "BUTTON")
-    this.setState({issue,display:true});
+    this.setState({issue,display:true,displayReason:false});
   }
 
   render()
@@ -69,7 +81,10 @@ class Issues extends Component{
          <td>{issue.department}</td>
          <td>{issue.facultyName}</td>
          <td>{issue.status}</td>
-         {this.props.data.position === "DEAN" && <Button onClick={()=>this.props.handleEdit(issue)} className = 'm-2'>Edit</Button>}
+         {
+           /*this.props.data.position === "DEA" && <Button onClick={()=>this.props.handleEdit(issue)} className = 'm-2'>Edit</Button>*/
+           /*This might be removed*/
+         }
          {(this.props.work === "dept" && this.props.data.position === "HOD") && <Button onClick={()=>{this.props.handleApprove(issue.issueID)}} className = 'm-2'>Approve/Reject</Button>}
          {(this.props.work === "my" && issue.status !== "accepted" ) && <Button onClick={()=>this.handleReason(issue)} className = 'm-2'>Submit Reason</Button>}
          </tr> )
@@ -82,17 +97,16 @@ class Issues extends Component{
  </Col>
  </Row>
  {
-   this.state.display===true && <Issue details={this.state.issue}/>
+   this.state.display===true && <Issue details={this.state.issue} closeModal={this.closeModal}/>
  }
  {
    this.state.displayReason===true &&
-    <div>
+    <div class="addReason rollTheLoader">
     <Modal.Dialog>
-    <Modal.Header closeButton={true}>Reason For Delay!</Modal.Header>
+    <Modal.Header closeButton={true} onClick={(e)=>this.closeModal(e.target,"REASON")}>Reason For Delay!</Modal.Header>
     <Modal.Body>
-    <input type ="text"></input><br></br>
-    <Button onClick={()=>this.submitReason(this.state.issue)}>Add Reason</Button>
-    <Button>Discard</Button>
+    <textarea type ="text" rows="5" ref={(input)=>this.reason = input}></textarea><br></br>
+    <Button className='m-2' onClick={()=>{this.submitReason(this.state.issue,this.reason.value);}}>Add</Button>
     </Modal.Body>
     </Modal.Dialog>
     </div>

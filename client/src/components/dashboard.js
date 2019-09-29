@@ -27,6 +27,16 @@ class Dashboard extends Component{
           remarks : "Not good enough"
         },
         {
+          issueID : 23957 ,
+          subject : "DM",
+          facultyName : "Jap Leen",
+          status : "pending",
+          department : "CSE",
+          date : "09/09/19",
+          time : "9:30",
+          remarks : "Not good enough"
+        },
+        {
           issueID : 23757 ,
           subject : "DM",
           facultyName : "Shubhangi",
@@ -53,9 +63,20 @@ class Dashboard extends Component{
   {
 
   }
-  handleReason(issueID)
+  handleReason(issue,value)
   {
-
+    console.log(issue,value);
+    //Obviously add code here to change the database
+    const issues = this.state.issues.map((item)=>{
+      if(item.issueID !== issue.issueID)
+      return item;
+      else {
+        item.status = "pending by HOD";
+        item.reason = value;
+        return item;
+      }
+    });
+    this.setState({'issues':issues});
   }
   handleApprove(issueID)
   {
@@ -75,7 +96,7 @@ class Dashboard extends Component{
     return (
       <React.Fragment>
       <TopBar/>
-      <NavBar details={this.state} handleApprove={(issueID)=>this.handleApprove(issueID)} handleReason={(issueID)=>this.handleReason(issueID)} handleEdit={(issueID)=>this.handleEdit(issueID)}/>
+      <NavBar details={this.state} handleApprove={(issueID)=>this.handleApprove(issueID)} handleReason={(issue,value)=>this.handleReason(issue,value)} handleEdit={(issueID)=>this.handleEdit(issueID)}/>
       </React.Fragment>
     );
   }

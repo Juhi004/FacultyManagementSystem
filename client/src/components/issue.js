@@ -17,17 +17,15 @@ class Issue extends Component{
   render()
   {
     return (
-      <Row>
+      <Row className="singleIssue rollTheLoader">
       <Modal.Dialog>
       {/*Add id of issue as per state */}
-      <Modal.Header closeButton>
-
+      <Modal.Header closeButton onClick={(e)=>this.props.closeModal(e.target,"ISSUE")}>
         <Modal.Title>Issue</Modal.Title>
       </Modal.Header>
 
       <Modal.Body>
       <Form>
-
         <Form.Group as={Row}>
         <Form.Label column md = "4">Department</Form.Label>
         <Col md = "4"><Form.Control plaintext readOnly defaultValue={this.props.details.department}></Form.Control></Col>
@@ -57,6 +55,11 @@ class Issue extends Component{
         <Form.Label column md = "4">Remarks</Form.Label>
         <Col md = "8"><Form.Control plaintext readOnly defaultValue={this.props.details.remarks}></Form.Control></Col>
         </Form.Group>
+
+        {(this.props.details.reason !== undefined) && <Form.Group as={Row}>
+        <Form.Label column md = "4">Reason For leave</Form.Label>
+        <Col md = "8"><Form.Control plaintext readOnly defaultValue={this.props.details.reason}></Form.Control></Col>
+        </Form.Group>}
 
         {/*Change the button color according to the state*/}
         <Form.Group as={Row}>

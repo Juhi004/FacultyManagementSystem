@@ -64,12 +64,10 @@ class NavBar extends Component{
         <Navbar.Brand><Button variant="secondary" onClick = {this.handleNewIssues}>Create a new Issue</Button></Navbar.Brand>
         }
       </Navbar>
-      <Row>
       {this.state.DPRVisible ? <Report data = {this.props} /> : null}
       {this.state.AllVisible ? <Issues className='m-2' data={this.props.details} handleApprove={(issueID)=>this.props.handleApprove(issueID)} handleEdit={(issueID)=>this.props.handleEdit(issueID)} work={"dept"}/> : null}
-      {this.state.MyVisible ? <Issues className='m-2' data={this.props.details} work={"my"} handleReason={(issueID)=>this.props.handleReason(issueID)} /> : null}
+      {this.state.MyVisible ? <Issues className='m-2' data={this.props.details} work={"my"} handleReason={(issue,value)=>this.props.handleReason(issue,value)} /> : null}
       {this.state.NewIssueVisible ? <NewIssue data = {this.props} /> : null}
-      </Row>
       </React.Fragment>
     );
   }
