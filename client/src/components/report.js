@@ -25,7 +25,6 @@ class Report extends Component{
       <Pie data={{labels: this.state.labels,
                   datasets : this.state.datasets
                 }}
-      height="50%"
       />
       </div>
     );

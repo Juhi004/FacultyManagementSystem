@@ -8,10 +8,32 @@ import Modal from 'react-bootstrap/Modal'
 import ModalDialog from 'react-bootstrap/ModalDialog'
 
 class NewIssue extends Component{
+  state={
+    searchTerm : '',
+    departments: ["CSE","ECE","MAE","ARCH","ASH"],
+    departmentWiseFaculty : [{
+     department:"CSE",
+     faculty:"Monika Mam"
+    },
+    {
+     department:"CSE",
+     faculty:"Monika Mam"
+    },
+    {
+     department:"ECE",
+     faculty:"Jasdeep Mam"
+   },
+   {
+    department:"MAE",
+    faculty:"Teena Mam"
+  }
+  ]
+  };
   constructor(props)
   {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
   }
 
   handleSubmit(event){
@@ -29,17 +51,22 @@ class NewIssue extends Component{
        classes : this.classes.value,
        time : this.time.value,
        date : this.date.value,
+       remarks: this.remarks.value,
+       status : "pending"
      }
      //send a request to db to check and update and return this with a complete object
    }
  };
-
+ onSearchChange(event)
+ {
+   this.setState({searchTerm : event.target.value})
+ }
   //Render method for the issue
   render()
   {
     return (
 <Modal.Dialog>
-      <Modal.Header closeButton>
+      <Modal.Header closeButton onClick={(e)=>{this.props.closeNewIssue(e.target)}}>
         <Modal.Title>New Issue</Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -47,12 +74,12 @@ class NewIssue extends Component{
         {/*Select a Department*/}
         <Form.Group controlId="department">
         <Form.Label>Department</Form.Label>
-        <Form.Control ref = {(input) => this.department = input } as="select">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
+        <Form.Control ref = {(input) => this.department = input } as="select" onChange={this.onSearchChange}>
+        <option>---Select One---</option>
+        { this.state.departments.map((department)=>{
+            return <option>{department}</option>
+        })
+        }
         </Form.Control>
         </Form.Group>
 
@@ -60,11 +87,15 @@ class NewIssue extends Component{
         <Form.Group controlId="faculty">
         <Form.Label>Faculty</Form.Label>
         <Form.Control ref = {(input) => this.faculty = input } as="select">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
-        <option>5</option>
+        <option>---Select One---</option>
+        {
+          this.state.departmentWiseFaculty.filter((combo)=>{
+            if(combo.department === this.state.searchTerm)
+            return combo;
+          }).map((combo)=>{
+              return <option>{combo.faculty}</option>
+            })
+        }
         </Form.Control>
         </Form.Group>
 
@@ -92,6 +123,11 @@ class NewIssue extends Component{
           <Form.Control ref = {(input) => this.date = input } placeholder="Enter Date" />
         </Form.Group>
 
+        <Form.Group controlId="remarks">
+          <Form.Label>Remarks</Form.Label>
+          <Form.Control ref = {(input) => this.remarks = input } placeholder="Enter Remarks" />
+        </Form.Group>
+
         <Form.Row>
         <Col>
           <Button variant="primary" type="submit">
@@ -99,7 +135,7 @@ class NewIssue extends Component{
           </Button>
         </Col>
         <Col>
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" onClick={(e)=>{this.props.closeNewIssue(e.target)}}>
             Discard
           </Button>
         </Col>

@@ -42,7 +42,7 @@ class LoginForm extends Component {
       // update the state of the component with the result here
       responseObject = xhr.responseText;
       if(JSON.parse(xhr.responseText).username !== undefined)
-      this.setState({showDashboard: true,showLoginForm: false,showLoader:false,data : responseObject});
+      this.setState({showDashboard: true,showLoginForm: false,showLoader:false,showAlert:false,data : responseObject});
       else
       this.setState({showLoader:false,showAlert:true});
     })

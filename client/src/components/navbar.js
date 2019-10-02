@@ -10,10 +10,10 @@ import Row from 'react-bootstrap/Row';
 
 class NavBar extends Component{
   state = {
-  DPRVisible : false,
-  AllVisible : false,
-  MyVisible : true,
-  NewIssueVisible : false
+    DPRVisible : false,
+    AllVisible : false,
+    MyVisible : true,
+    NewIssueVisible : false
 };
   constructor(props)
   {
@@ -22,11 +22,19 @@ class NavBar extends Component{
     this.handleAllIssues = this.handleAllIssues.bind(this);
     this.handleDPR = this.handleDPR.bind(this);
     this.handleNewIssues = this.handleNewIssues.bind(this);
+    this.closeNewIssue = this.closeNewIssue.bind(this);
     this.state = {
       DPRVisible : false,
       AllVisible : false,
       MyVisible : true,
       NewIssueVisible : false
+    }
+  }
+  closeNewIssue(target)
+  {
+    if((target.nodeName==="SPAN" || target.nodeName==="BUTTON" ) )
+    {
+      this.setState({NewIssueVisible:false});
     }
   }
   handleMyIssues(){
@@ -67,7 +75,7 @@ class NavBar extends Component{
       {this.state.DPRVisible ? <Report data = {this.props} /> : null}
       {this.state.AllVisible ? <Issues className='m-2' data={this.props.details} handleApprove={(issueID)=>this.props.handleApprove(issueID)} handleEdit={(issueID)=>this.props.handleEdit(issueID)} work={"dept"}/> : null}
       {this.state.MyVisible ? <Issues className='m-2' data={this.props.details} work={"my"} handleReason={(issue,value)=>this.props.handleReason(issue,value)} /> : null}
-      {this.state.NewIssueVisible ? <NewIssue data = {this.props} /> : null}
+      {this.state.NewIssueVisible ? <NewIssue data = {this.props} closeNewIssue={this.closeNewIssue}/> : null}
       </React.Fragment>
     );
   }

@@ -14,7 +14,7 @@ class Dashboard extends Component{
     this.state = {
       facultyName : "Jap Leen" ,
       department : "CSE",
-      position : "HOD",
+      position : "DEAN",
       issues : [
         {
           issueID : 23457 ,
@@ -65,7 +65,6 @@ class Dashboard extends Component{
   }
   handleReason(issue,value)
   {
-    console.log(issue,value);
     //Obviously add code here to change the database
     const issues = this.state.issues.map((item)=>{
       if(item.issueID !== issue.issueID)

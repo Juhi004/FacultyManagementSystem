@@ -72,7 +72,7 @@ class Issues extends Component{
    <tbody>
    {
      this.props.data.issues.map(issue => {
-      if((this.props.work === "my" && this.props.data.facultyName === issue.facultyName )|| (this.props.work==="dept" && this.props.data.department === issue.department))
+      if((this.props.work === "my" && this.props.data.facultyName === issue.facultyName )|| (this.props.work==="dept" && (this.props.data.department === issue.department || this.props.data.position === "DEAN")))
       {
         return (
          <tr onClick={(e)=>{this.handleClick(issue,e.target)}} key={issue.issueID}>
