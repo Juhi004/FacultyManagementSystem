@@ -40,22 +40,30 @@ router.route('/issues:id').get((req, res) => {
     .catch(err => res.status(400).json('Error: '+ err));
 });
 
+//@TODO : I was working on this issue, only
 //for updating issue
-router.route('/issues:id').put((req, res) => {
-  Issue.findById(req.params.id)
-    .then(user => {
-      issue.department = req.body.department;
-      issue.subject = req.body.subject;
-      issue.date = Date(req.body.date);
-      issue.time_slot = Number(req.body.time_slot);
-      issue.reason = req.body.reason;
+router.route('/issue').put((req, res) => {
+  console.log("request",req.body);
+  //
+  Issue.findById(req.body._id,function(err,data){
+    if(!err && data)
+    {
+      console.log(data);
+    }else{
+      res.json({"Error": err});
+    }
+  });
+  //
+  /*Issue.findById(req.body._id)
+    .then(issue => {
+      if(req.body.status !== undefined)
       issue.status = req.body.status;
 
       issue.save()
         .then(() => res.json('Issue updated!'))
         .catch(err => res.status(400).json('Error: ' + err));
     })
-    .catch(err => res.status(400).json('Error: ' + err));
+    .catch(err => res.status(400).json('Error: ' + err));*/
 });
 
 router.route('/faculty').get((req, res) => {

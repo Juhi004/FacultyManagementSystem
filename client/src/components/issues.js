@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+ import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Col from 'react-bootstrap/Col';
@@ -66,7 +66,10 @@ class Issues extends Component{
        <th>Department</th>
        <th>Faculty</th>
        <th>Status</th>
-       <th>Action</th>
+       {
+        ( this.props.data.position !== "DEAN" || this.props.work === "my" ) &&
+         <th>Action</th>
+       }
      </tr>
    </thead>
    <tbody>
@@ -75,18 +78,24 @@ class Issues extends Component{
       if((this.props.work === "my" && this.props.data.facultyName === issue.facultyName )|| (this.props.work==="dept" && (this.props.data.department === issue.department || this.props.data.position === "DEAN")))
       {
         return (
-         <tr onClick={(e)=>{this.handleClick(issue,e.target)}} key={issue.issueID}>
-         <td>{issue.issueID}</td>
+         <tr onClick={(e)=>{this.handleClick(issue,e.target)}} key={issue._id}>
+         <td>{issue._id}</td>
          <td>{issue.date}</td>
          <td>{issue.department}</td>
          <td>{issue.facultyName}</td>
-         <td>{issue.status}</td>
+         <td>
+         {issue.status === "accepted" && <Button variant="success">{issue.status}</Button>}
+         {issue.status === "rejected" && <Button variant="danger">{issue.status}</Button>}
+         {issue.status === "pending by HOD" && <Button variant="info">{issue.status}</Button>}
+         {issue.status === "pending" && <Button variant="warning">{issue.status}</Button>}
+                 </td>
          {
            /*this.props.data.position === "DEA" && <Button onClick={()=>this.props.handleEdit(issue)} className = 'm-2'>Edit</Button>*/
            /*This might be removed*/
          }
-         {(this.props.work === "dept" && this.props.data.position === "HOD") && <Button onClick={()=>{this.props.handleApprove(issue.issueID)}} className = 'm-2'>Approve/Reject</Button>}
-         {(this.props.work === "my" && issue.status !== "accepted" ) && <Button onClick={()=>this.handleReason(issue)} className = 'm-2'>Submit Reason</Button>}
+         {(this.props.work === "dept" && this.props.data.position === "HOD" && issue.status === "pending by HOD") && <Button variant="success" onClick={()=>{this.props.handleApprove(issue._id,"approve")}} className = 'm-2'>Approve</Button>}
+         {(this.props.work === "dept" && this.props.data.position === "HOD" && issue.status === "pending by HOD") && <Button variant="danger" onClick={()=>{this.props.handleApprove(issue._id,"reject")}} className = 'm-2'>Reject</Button>}
+         {(this.props.work === "my" && (issue.status === "pending" || issue.status === "pending by HOD" ) ) && <Button onClick={()=>this.handleReason(issue)} className = 'm-2'>Submit Reason</Button>}
          </tr> )
        }
      })

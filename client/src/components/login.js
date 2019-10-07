@@ -9,18 +9,23 @@ import style from 'bootstrap/dist/css/bootstrap.css';
 import Alert from 'react-bootstrap/Alert';
 
 class LoginForm extends Component {
-  //change this state : NO
   state = {
     showDashboard : false,
     showLoginForm : true,
     showLoader : false,
     showAlert : false,
+    showPassword : false,
     data : {}
   }
   constructor()
   {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.togglePassword = this.togglePassword.bind(this);
+  }
+  togglePassword()
+  {
+    this.setState({showPassword:!this.state.showPassword});
   }
   handleSubmit(event)
   {
@@ -41,8 +46,8 @@ class LoginForm extends Component {
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
       responseObject = xhr.responseText;
-      if(JSON.parse(xhr.responseText).username !== undefined)
-      this.setState({showDashboard: true,showLoginForm: false,showLoader:false,showAlert:false,data : responseObject});
+      if(JSON.parse(xhr.responseText).facultyName !== undefined)
+      this.setState({showDashboard: true,showLoginForm: false,showLoader:false,showAlert:false,data : JSON.parse(responseObject)});
       else
       this.setState({showLoader:false,showAlert:true});
     })
@@ -76,7 +81,7 @@ class LoginForm extends Component {
       </Alert>
     }
   {this.state.showLoader === true&& <div class="rollTheLoader"><div class="lds-roller">Loading<div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>}
-  {this.state.showDashboard && <Dashboard/>}
+  {this.state.showDashboard && <Dashboard data={this.state.data}/>}
   {this.state.showLoginForm &&
     <div><Row><Col md = {12}><TopBar/></Col></Row>
   <Row>
@@ -85,16 +90,16 @@ class LoginForm extends Component {
   <Form className = 'm-3' onSubmit = {this.handleSubmit}>
     <Form.Group controlId="formBasicEmail">
       <Form.Label>Email address</Form.Label>
-      <Form.Control type="email" name = "email" placeholder="Enter email" />
+      <Form.Control type="email" name = "email" placeholder="Enter email" required/>
     </Form.Group>
 
     <Form.Group controlId="formBasicPassword">
       <Form.Label>Password</Form.Label>
-      <Form.Control type="password" name = "password" placeholder="Password" />
+      <Form.Control type={this.state.showPassword === false ? "password" : "text"} name = "password" placeholder="Password" required/>
     </Form.Group>
 
     <Form.Group controlId="formBasicChecbox">
-      <Form.Check type="checkbox" label="See password"/>
+      <Form.Check type="checkbox" label="Show password" onClick={this.togglePassword}/>
       </Form.Group>
       <Row>
       <Col md={5}></Col>

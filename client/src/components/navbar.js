@@ -73,7 +73,7 @@ class NavBar extends Component{
         }
       </Navbar>
       {this.state.DPRVisible ? <Report data = {this.props} /> : null}
-      {this.state.AllVisible ? <Issues className='m-2' data={this.props.details} handleApprove={(issueID)=>this.props.handleApprove(issueID)} handleEdit={(issueID)=>this.props.handleEdit(issueID)} work={"dept"}/> : null}
+      {this.state.AllVisible ? <Issues className='m-2' data={this.props.details} handleApprove={(_id,str)=>this.props.handleApprove(_id,str)} handleEdit={(_id)=>this.props.handleEdit(_id)} work={"dept"}/> : null}
       {this.state.MyVisible ? <Issues className='m-2' data={this.props.details} work={"my"} handleReason={(issue,value)=>this.props.handleReason(issue,value)} /> : null}
       {this.state.NewIssueVisible ? <NewIssue data = {this.props} closeNewIssue={this.closeNewIssue}/> : null}
       </React.Fragment>

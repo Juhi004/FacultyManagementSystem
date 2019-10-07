@@ -64,7 +64,20 @@ class Issue extends Component{
         {/*Change the button color according to the state*/}
         <Form.Group as={Row}>
         <Form.Label column md = "4">Status</Form.Label>
-        <Col md = "4"><Button>{this.props.details.status}</Button></Col>
+        <Col md = "4">
+        {
+          this.props.details.status === "accepted" && <Button variant="success">{this.props.details.status}</Button>
+        }
+        {
+          this.props.details.status === "rejected" && <Button variant="danger">{this.props.details.status}</Button>
+        }
+        {
+          this.props.details.status === "pending by HOD" && <Button variant="info">{this.props.details.status}</Button>
+        }
+        {
+          this.props.details.status === "pending" && <Button variant="warning">{this.props.details.status}</Button>
+        }
+        </Col>
         </Form.Group>
 
         <Form.Group as={Row}>

@@ -5,61 +5,15 @@ import NavBar from './navbar';
 
 class Dashboard extends Component{
   state : {};
-  constructor()
+  constructor(props)
   {
-    super();
+    super(props);
     this.handleApprove = this.handleApprove.bind(this);
     this.handleEdit = this.handleEdit.bind(this);
     this.handleReason = this.handleReason.bind(this);
-    this.state = {
-      facultyName : "Jap Leen" ,
-      department : "CSE",
-      position : "DEAN",
-      issues : [
-        {
-          issueID : 23457 ,
-          subject : "DWDM",
-          facultyName : "Jap Leen",
-          status : "pending",
-          department : "CSE",
-          date : "09/09/19",
-          time : "9:30",
-          remarks : "Not good enough"
-        },
-        {
-          issueID : 23957 ,
-          subject : "DM",
-          facultyName : "Jap Leen",
-          status : "pending",
-          department : "CSE",
-          date : "09/09/19",
-          time : "9:30",
-          remarks : "Not good enough"
-        },
-        {
-          issueID : 23757 ,
-          subject : "DM",
-          facultyName : "Shubhangi",
-          status : "pending",
-          department : "CSE",
-          date : "20/10/19",
-          time : "9:30",
-          remarks : "Not good enough"
-        },
-        {
-          issueID : 23657 ,
-          subject : "DCCN",
-          facultyName : "Juhi",
-          status : "pending",
-          department : "CSE",
-          date : "11/09/19",
-          time : "10:30",
-          remarks : "Not good enough"
-        }
-      ]
-    }
+    this.state = this.props.data;
   }
-  handleEdit(issueID)
+  handleEdit(_id)
   {
 
   }
@@ -67,7 +21,7 @@ class Dashboard extends Component{
   {
     //Obviously add code here to change the database
     const issues = this.state.issues.map((item)=>{
-      if(item.issueID !== issue.issueID)
+      if(item._id !== issue._id)
       return item;
       else {
         item.status = "pending by HOD";
@@ -77,25 +31,58 @@ class Dashboard extends Component{
     });
     this.setState({'issues':issues});
   }
-  handleApprove(issueID)
+  handleApprove(_id,str)
   {
-    //Obviously add code here to change the database
-    const issues = this.state.issues.map((issue)=>{
-      if(issue.issueID !== issueID)
-      return issue;
-      else {
-        issue.status = "accepted";
+    //code to request the database // @TODO: Do we need to add extra checking to check the username and password combo too?
+    // create a new XMLHttpRequest
+    var xhr = new XMLHttpRequest();
+    // get a callback when the server responds
+    xhr.addEventListener('load', () => {
+      // update the state of the component with the result here
+      console.log(xhr.responseText);
+
+      //Only if the database update was sucessfull !
+      //TODO: Do we need to insert an alert here ?
+      const issues = this.state.issues.map((issue)=>{
+        if(issue._id !== _id)
         return issue;
-      }
+        else {
+          if(str === "approve")
+          { issue.status = "accepted";
+          return issue;}
+          else
+          { issue.status = "rejected";
+          return issue;}
+        }
+      });
+      this.setState({'issues':issues});
+
+    })
+
+    xhr.addEventListener('error', (error) => {
+      console.log("error",error);
+    })
+    xhr.addEventListener('abort', () => {
+      console.log("abort");
+    })
+
+    // open the request with the verb and the url
+  //  xhr.open('GET', 'https://faculty-management-system.herokuapp.com/login')
+    xhr.open('PUT', '/api/issue',false);
+    xhr.send({
+      _id : _id,
+      status : str === "approve" ? "accepted" : "rejected"
     });
-    this.setState({'issues':issues});
+
   }
   render()
   {
     return (
       <React.Fragment>
       <TopBar/>
-      <NavBar details={this.state} handleApprove={(issueID)=>this.handleApprove(issueID)} handleReason={(issue,value)=>this.handleReason(issue,value)} handleEdit={(issueID)=>this.handleEdit(issueID)}/>
+      {
+        <NavBar details={this.state} handleApprove={(_id,str)=>this.handleApprove(_id,str)} handleReason={(issue,value)=>this.handleReason(issue,value)} handleEdit={(_id)=>this.handleEdit(_id)}/>
+      }
       </React.Fragment>
     );
   }
