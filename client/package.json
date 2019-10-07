@@ -30,7 +30,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "me" : "http://127.0.0.1:5000"
   },
   "eslintConfig": {
     "plugins": [
@@ -53,7 +54,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://127.0.0.1:5000",
+
+  "proxy": "https://faculty-management-system.herokuapp.com",
   "devDependencies": {
     "chartjs": "^0.3.24",
     "eslint": "^6.4.0",
