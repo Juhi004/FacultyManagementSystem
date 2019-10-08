@@ -4,6 +4,55 @@ let Issue = require('../models/issue.model');
 let Faculty = require('../models/faculty.model');
 let Hod = require('../models/hod.model');
 
+//For updating the issue status from pending by HOD to accepted/rejected !!
+//need to apply to check if its actually an HOD requesting and also that the status is pending by HOD in db too
+//@TODO : I was working on this issue, only
+//for updating issue
+router.route('/issue').post((req, res) => {
+  const requestObj = req.body;
+  Issue.findById(requestObj._id,function(err,data){
+    if(!err && data)
+    {
+      Issue.updateOne({_id : data._id},{status : requestObj.status},{strict: false},function(err,response) {
+        if(!err)
+        {
+          res.status(200).json("Success");
+        }else{
+          res.status(500).json("Error"+err);
+        }
+      })
+    }else{
+      res.status(500).json("Error"+ err);
+    }
+  });
+
+});
+
+//For updating the issue status to pending by HOD and submit a request
+//need to apply to check if its actually an HOD requesting and also that the status is pending in db too
+//or @JUHI, if we want to edit issue maybe the status can be pending by HOD too
+//@TODO : I was working on this issue, only
+//for updating issue
+router.route('/issueReason').post((req, res) => {
+  const requestObj = req.body;
+  Issue.findById(requestObj._id,function(err,data){
+    if(!err && data)
+    {
+      Issue.updateOne({_id : data._id},{status : requestObj.status,reason : requestObj.reason },{strict: false},function(err,response) {
+        if(!err)
+        {
+          res.status(200).json("Success");
+        }else{
+          res.status(500).json("Error"+err);
+        }
+      })
+    }else{
+      res.status(500).json("Error"+ err);
+    }
+  });
+
+});
+
 router.route('/issues').get((req, res) => {
   Issue.find()
     .then(issues => res.json(issues))
@@ -22,8 +71,8 @@ router.route('/issues').post((req, res) => {
     department,
     subject,
     date,
-    time_slot,
-    reason,
+    time,
+    remarks,
     status,
   });
 
@@ -40,31 +89,6 @@ router.route('/issues:id').get((req, res) => {
     .catch(err => res.status(400).json('Error: '+ err));
 });
 
-//@TODO : I was working on this issue, only
-//for updating issue
-router.route('/issue').put((req, res) => {
-  console.log("request",req.body);
-  //
-  Issue.findById(req.body._id,function(err,data){
-    if(!err && data)
-    {
-      console.log(data);
-    }else{
-      res.json({"Error": err});
-    }
-  });
-  //
-  /*Issue.findById(req.body._id)
-    .then(issue => {
-      if(req.body.status !== undefined)
-      issue.status = req.body.status;
-
-      issue.save()
-        .then(() => res.json('Issue updated!'))
-        .catch(err => res.status(400).json('Error: ' + err));
-    })
-    .catch(err => res.status(400).json('Error: ' + err));*/
-});
 
 router.route('/faculty').get((req, res) => {
   Faculty.find()
