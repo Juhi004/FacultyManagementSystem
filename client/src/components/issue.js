@@ -57,8 +57,13 @@ class Issue extends Component{
         </Form.Group>
 
         {(this.props.details.reason !== undefined) && <Form.Group as={Row}>
-        <Form.Label column md = "4">Reason For leave</Form.Label>
+        <Form.Label column md = "4">Reason For Absence</Form.Label>
         <Col md = "8"><Form.Control plaintext readOnly defaultValue={this.props.details.reason}></Form.Control></Col>
+        </Form.Group>}
+
+        {(this.props.details.reasonByHOD !== undefined) && <Form.Group as={Row}>
+        <Form.Label column md = "4">Reason By HOD</Form.Label>
+        <Col md = "8"><Form.Control plaintext readOnly defaultValue={this.props.details.reasonByHOD}></Form.Control></Col>
         </Form.Group>}
 
         {/*Change the button color according to the state*/}

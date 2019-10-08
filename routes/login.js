@@ -17,20 +17,20 @@ User.find({$and: [{email:email}, {password:password}]},function(err,data){
         finalObjectToReturn.dashCode = data[0].dashCode;
 
         //get the department too
-        Faculty.find({name : data[0].username},function(err,data){
-          if(!err && data.length !== 0)
+        Faculty.find({name : data[0].username},function(err,resData){
+          if(!err && resData.length !== 0)
           {
-            finalObjectToReturn.department = data[0].department;
+            finalObjectToReturn.department = resData[0].department;
             let searchIssues = {};
             if(finalObjectToReturn.dashCode === 1)
             {
               //you are an HOD and you need the departments+your own issues, basically our own issues
-              searchIssues = {department : data[0].department};
+              searchIssues = {department : resData[0].department};
               finalObjectToReturn.position = "HOD";
 
             }else if(finalObjectToReturn.dashCode === 2){
               //you are a faculty and you need only your issues
-              searchIssues = {faculty : data[0].name};
+              searchIssues = {facultyName : resData[0].name};
               finalObjectToReturn.position = "professor";
 
             }else{

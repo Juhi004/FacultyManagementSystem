@@ -10,28 +10,13 @@ import ModalDialog from 'react-bootstrap/ModalDialog'
 class NewIssue extends Component{
   state={
     searchTerm : '',
-    departments: ["CSE","ECE","MAE","ARCH","ASH"],
-    departmentWiseFaculty : [{
-     department:"CSE",
-     faculty:"Monika Mam"
-    },
-    {
-     department:"CSE",
-     faculty:"Monika Mam"
-    },
-    {
-     department:"ECE",
-     faculty:"Jasdeep Mam"
-   },
-   {
-    department:"MAE",
-    faculty:"Teena Mam"
-  }
-  ]
+    //do we need to put the departments into a database document too ?
+    departments: ["CSE","ECE","MAE","Arch.","ASH"]
   };
   constructor(props)
   {
     super(props);
+    console.log(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
   }
@@ -46,15 +31,43 @@ class NewIssue extends Component{
    }else {
      const issue = {
        department : this.department.value,
-       faculty : this.faculty.value,
+       facultyName : this.faculty.value,
        subject : this.subject.value,
-       classes : this.classes.value,
+       class : this.classes.value,
        time : this.time.value,
        date : this.date.value,
        remarks: this.remarks.value,
        status : "pending"
      }
+
      //send a request to db to check and update and return this with a complete object
+     // @TODO: Do we need to add extra checking to check the username and password combo too?
+     // create a new XMLHttpRequest
+     var xhr = new XMLHttpRequest();
+     // get a callback when the server responds
+     xhr.addEventListener('load', () => {
+       // update the state of the component with the result here
+       console.log(xhr.responseText);
+
+       //Only if the database update was sucessfull !
+       //TODO: Do we need to insert an alert here ?
+       //TODO : do we need to make any changes to the UI, although the success message is a must here
+     });
+
+     xhr.addEventListener('error', (error) => {
+       console.log("error",error);
+       //TODO : insert a failure message
+     })
+     xhr.addEventListener('abort', () => {
+       console.log("abort");
+     })
+
+     // open the request with the verb and the url
+   //  xhr.open('GET', 'https://faculty-management-system.herokuapp.com/login')
+     xhr.open('POST', '/api/issueCreate');
+     xhr.setRequestHeader('Content-Type', 'application/json');
+     //JSON.stringify(issue)
+     xhr.send(JSON.stringify(issue));
    }
  };
  onSearchChange(event)
@@ -89,11 +102,11 @@ class NewIssue extends Component{
         <Form.Control ref = {(input) => this.faculty = input } as="select">
         <option>---Select One---</option>
         {
-          this.state.departmentWiseFaculty.filter((combo)=>{
+          this.props.departmentWiseFaculty.filter((combo)=>{
             if(combo.department === this.state.searchTerm)
             return combo;
           }).map((combo)=>{
-              return <option>{combo.faculty}</option>
+              return <option>{combo.name}</option>
             })
         }
         </Form.Control>

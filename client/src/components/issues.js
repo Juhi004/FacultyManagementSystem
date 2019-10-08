@@ -112,7 +112,7 @@ class Issues extends Component{
    this.state.displayReason===true &&
     <div class="addReason rollTheLoader">
     <Modal.Dialog>
-    <Modal.Header closeButton={true} onClick={(e)=>this.closeModal(e.target,"REASON")}>Reason For Delay!</Modal.Header>
+    <Modal.Header closeButton={true} onClick={(e)=>this.closeModal(e.target,"REASON")}>Reason For Absence!</Modal.Header>
     <Modal.Body>
     <textarea type ="text" rows="5" ref={(input)=>this.reason = input}></textarea><br></br>
     <Button className='m-2' onClick={()=>{this.submitReason(this.state.issue,this.reason.value);}}>Add</Button>

@@ -28,6 +28,24 @@ router.route('/issue').post((req, res) => {
 
 });
 
+//For creating a  new issue
+//need to apply to check if its actually an HOD requesting and also that the status is pending in db too
+//or @JUHI, if we want to edit issue maybe the status can be pending by HOD too
+//@TODO : I was working on this issue, only
+//for updating issue
+router.route('/issueCreate').post((req, res) => {
+  const requestObj = req.body;
+  Issue.create(requestObj,function(err,data){
+    if(!err && data)
+    {
+      res.status(200).json(data);
+    }else{
+      res.status(500).json("Error"+ err);
+    }
+  });
+
+});
+
 //For updating the issue status to pending by HOD and submit a request
 //need to apply to check if its actually an HOD requesting and also that the status is pending in db too
 //or @JUHI, if we want to edit issue maybe the status can be pending by HOD too
@@ -46,6 +64,20 @@ router.route('/issueReason').post((req, res) => {
           res.status(500).json("Error"+err);
         }
       })
+    }else{
+      res.status(500).json("Error"+ err);
+    }
+  });
+
+});
+
+//TODO : Add the password and username checking ? or not !
+//check if actually sir is sending the requests or they are being sent by postman
+router.route('/issueDataList').get((req, res) => {
+  Faculty.find({},{"_id" : 0,"name" : 1,"department": 1},function(err,data){
+    if(!err && data)
+    {
+      res.status(200).send(JSON.stringify({"departmentWiseFaculty" : data}));
     }else{
       res.status(500).json("Error"+ err);
     }
