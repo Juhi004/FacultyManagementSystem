@@ -16,7 +16,39 @@ class NavBar extends Component{
     MyVisible : true,
     NewIssueVisible : false,
     hasDataList : false,
+    hasDPR : false
 };
+  getDPR()
+  {
+    //send a request to db to get data
+    // @TODO: Do we need to add extra checking to check the username and password combo too?
+    // create a new XMLHttpRequest
+    var xhr = new XMLHttpRequest();
+    // get a callback when the server responds
+    xhr.addEventListener('load', () => {
+      // update the state of the component with the result here
+      //console.log(xhr.responseText);
+      this.setState({dprData : JSON.parse(xhr.responseText).dprData ,hasDPR : true});
+      //TODO : if sucessfull, update the state here and set hasDPR to true
+
+      //Only if the database update was sucessfull !
+      //TODO: Do we need to insert an alert here ?
+    });
+
+    xhr.addEventListener('error', (error) => {
+      console.log("error",error);
+      //TODO : insert a failure message
+    })
+    xhr.addEventListener('abort', () => {
+      console.log("abort");
+    })
+    // open the request with the verb and the url
+    xhr.open('GET', '/api/issueDPR');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.setRequestHeader('position',this.props.details.position);
+    xhr.setRequestHeader('department',this.props.details.department);
+    xhr.send();
+  }
 
   getDataList()
   {
@@ -62,8 +94,11 @@ class NavBar extends Component{
       AllVisible : false,
       MyVisible : true,
       NewIssueVisible : false,
-      hasDataList : false
+      hasDataList : false,
+      hasDPR : false
     }
+    this.getDataList()
+    this.getDPR()
   }
   closeNewIssue(target)
   {
@@ -89,7 +124,6 @@ class NavBar extends Component{
   {
     return (
       <React.Fragment>
-      {this.getDataList()}
       <Navbar expand="xl" bg="dark" variant="dark" className='mt-3'>
         <Navbar.Brand><Button variant="secondary" onClick = {this.handleMyIssues}>My Issues</Button></Navbar.Brand>
         {/*Only HOD and Dean can see All issues*/}
@@ -110,7 +144,8 @@ class NavBar extends Component{
         <Navbar.Brand><Button variant="secondary" onClick = {this.handleNewIssues}>Create a new Issue</Button></Navbar.Brand>
         }
       </Navbar>
-      {this.state.DPRVisible ? <Report data = {this.props} /> : null}
+      {(this.state.DPRVisible && this.state.hasDPR) ? <Report dprData = {this.state.dprData} /> : null}
+      {(this.state.DPRVisible && !this.state.hasDPR) ? <div>There will be a loader here for DPR!</div> : null}
       {this.state.AllVisible ? <Issues className='m-2' data={this.props.details} handleApprove={(_id,str)=>this.props.handleApprove(_id,str)} handleEdit={(_id)=>this.props.handleEdit(_id)} work={"dept"}/> : null}
       {this.state.MyVisible ? <Issues className='m-2' data={this.props.details} work={"my"} handleReason={(issue,value)=>this.props.handleReason(issue,value)} /> : null}
       {(this.state.NewIssueVisible && this.state.hasDataList ) ? <NewIssue data = {this.props} departmentWiseFaculty={this.state.departmentWiseFaculty} closeNewIssue={this.closeNewIssue}/> : null}

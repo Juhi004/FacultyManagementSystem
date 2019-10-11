@@ -22,6 +22,7 @@ class Report extends Component{
   {
     return (
       <div>
+      {console.log(this.props.dprData)}
       <Pie data={{labels: this.state.labels,
                   datasets : this.state.datasets
                 }}

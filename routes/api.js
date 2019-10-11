@@ -85,6 +85,50 @@ router.route('/issueDataList').get((req, res) => {
 
 });
 
+
+//TODO:  for getting the records for getting the departmentReport
+
+router.route('/issueDPR').get((req, res) => {
+  const department = req.headers.department;
+  const position = req.headers.position;
+  if(position==="DEAN")
+  {
+    Issue.aggregate([
+      {
+        $group : {
+          _id : '$status',
+          count : {$sum : 1}
+        }
+      }
+    ],function(err,data){
+      console.log("data",data);
+      console.log("err",err);
+      res.json("HI");
+    });
+    //get all the issues but department wise
+  }else if(position==="HOD")
+  {
+    //get only the issues of this particular department
+    Issue.aggregate([
+      {
+        $group : {
+          _id : '$status',
+          count : {$sum : 1}
+        }
+      }
+    ],function(err,data){
+      console.log("data",data);
+      console.log("err",err);
+      res.json({HI:"Hi"});
+    });
+  }else{
+    res.status(500).json("Error" + "this is not a valid request");
+  }
+
+});
+
+
+
 router.route('/issues').get((req, res) => {
   Issue.find()
     .then(issues => res.json(issues))
