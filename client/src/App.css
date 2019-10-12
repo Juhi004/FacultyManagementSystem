@@ -1,3 +1,7 @@
+.logo{
+    height : 10vh;
+}
+
 .singleIssue{
   display: block;
   position: absolute !important;

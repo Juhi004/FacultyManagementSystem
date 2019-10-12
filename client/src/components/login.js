@@ -23,6 +23,7 @@ class LoginForm extends Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.togglePassword = this.togglePassword.bind(this);
   }
+
   togglePassword()
   {
     this.setState({showPassword:!this.state.showPassword});

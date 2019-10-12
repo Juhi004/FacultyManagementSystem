@@ -33,7 +33,7 @@ class TopBar extends Component{
     var xhr = new XMLHttpRequest();
     // get a callback when the server responds
     xhr.addEventListener('load', () => {
-      
+
       //TODO : if sucessfull, update the state here and set hasDPR to true
       //Only if the database update was sucessfull !
       //TODO: Do we need to insert an alert here ?

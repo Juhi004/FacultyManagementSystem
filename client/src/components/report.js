@@ -15,7 +15,7 @@ class Report extends Component{
         labels : ['accepted','rejected','pending','pending by HOD'],
         datasets :[{
           data : [0,0,0,0] ,
-          backgroundColor : ['red','blue','green','yellow']
+          backgroundColor : ['#28a745','#dc3545','#ffc107','#17a2b8']
         }]
       };
       if(this.props.position === "HOD")

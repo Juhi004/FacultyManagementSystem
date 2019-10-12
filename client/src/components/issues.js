@@ -74,7 +74,6 @@ class Issues extends Component{
   <Table striped bordered hover>
    <thead>
      <tr>
-       <th>ID</th>
        <th>Date</th>
        <th>Department</th>
        <th>Faculty</th>
@@ -92,7 +91,6 @@ class Issues extends Component{
       {
         return (
          <tr onClick={(e)=>{this.handleClick(issue,e.target)}} key={issue._id}>
-         <td>{issue._id}</td>
          <td>{issue.date}</td>
          <td>{issue.department}</td>
          <td>{issue.facultyName}</td>

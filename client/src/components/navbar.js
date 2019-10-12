@@ -130,9 +130,9 @@ class NavBar extends Component{
     this.getDPR();
     this.getDepartmentList();
   }
-  closeNewIssue(target)
+  closeNewIssue(str,target)
   {
-    if((target.nodeName==="SPAN" || target.nodeName==="BUTTON" ) )
+    if(str==="close" || (target.nodeName==="SPAN" || target.nodeName==="BUTTON" ))
     {
       this.setState({NewIssueVisible:false});
     }
@@ -177,7 +177,7 @@ class NavBar extends Component{
       {(this.state.DPRVisible && this.state.hasDPR) ? <Report dprData = {this.state.dprData} position={this.props.details.position} ListOfDepartments={this.state.ListOfDepartments}/> : null}
       {this.state.AllVisible ? <Issues className='m-2' data={this.props.details} handleApprove={(_id,str,value)=>this.props.handleApprove(_id,str,value)} handleEdit={(_id)=>this.props.handleEdit(_id)} work={"dept"}/> : null}
       {this.state.MyVisible ? <Issues className='m-2' data={this.props.details} work={"my"} handleReason={(issue,value)=>this.props.handleReason(issue,value)} /> : null}
-      {(this.state.NewIssueVisible && this.state.hasDataList ) ? <NewIssue data = {this.props} departmentWiseFaculty={this.state.departmentWiseFaculty} closeNewIssue={this.closeNewIssue} ListOfDepartments={this.state.ListOfDepartments}/> : null}
+      {(this.state.NewIssueVisible && this.state.hasDataList ) ? <NewIssue data = {this.props} departmentWiseFaculty={this.state.departmentWiseFaculty} closeNewIssue={(str,target)=>this.closeNewIssue(str,target)} ListOfDepartments={this.state.ListOfDepartments}/> : null}
       </React.Fragment>
     );
   }

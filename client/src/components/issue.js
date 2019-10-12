@@ -47,6 +47,11 @@ class Issue extends Component{
         </Form.Group>
 
         <Form.Group as={Row}>
+        <Form.Label column md = "4">Class</Form.Label>
+        <Col md = "4"><Form.Control plaintext readOnly defaultValue={this.props.details.class}></Form.Control></Col>
+        </Form.Group>
+
+        <Form.Group as={Row}>
         <Form.Label column md = "4">Time</Form.Label>
         <Col md = "4"><Form.Control plaintext readOnly defaultValue={this.props.details.time}></Form.Control></Col>
         </Form.Group>

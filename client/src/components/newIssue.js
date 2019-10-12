@@ -6,6 +6,12 @@ import Row from 'react-bootstrap/Row';
 import style from 'bootstrap/dist/css/bootstrap.css';
 import Modal from 'react-bootstrap/Modal'
 import ModalDialog from 'react-bootstrap/ModalDialog'
+import 'moment/locale/en-au.js';
+import 'rc-datepicker/lib/style.css';
+import { DatePicker, DatePickerInput } from 'rc-datepicker';
+
+//for the calendar
+const date = new Date();
 
 class NewIssue extends Component{
   state={
@@ -17,6 +23,13 @@ class NewIssue extends Component{
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
+    this.calendarOnChange = this.calendarOnChange.bind(this);
+  }
+
+  //for the calendar
+  calendarOnChange(jsDate, dateString){
+    console.log(this.cal.state.dateString);
+    //console.log((jsDate.getDate()).toString()+'/'+(jsDate.getMonth()).toString()+'/'+(jsDate.getFullYear()).toString());
   }
 
   handleSubmit(event){
@@ -33,7 +46,7 @@ class NewIssue extends Component{
        subject : this.subject.value,
        class : this.classes.value,
        time : this.time.value,
-       date : this.date.value,
+       date : this.cal.state.dateString,
        remarks: this.remarks.value,
        status : "pending"
      }
@@ -45,8 +58,8 @@ class NewIssue extends Component{
      // get a callback when the server responds
      xhr.addEventListener('load', () => {
        // update the state of the component with the result here
-       console.log(xhr.responseText);
-
+       //console.log(xhr.responseText);
+       this.props.closeNewIssue("close","target");
        //Only if the database update was sucessfull !
        //TODO: Do we need to insert an alert here ?
        //TODO : do we need to make any changes to the UI, although the success message is a must here
@@ -85,7 +98,7 @@ class NewIssue extends Component{
         {/*Select a Department*/}
         <Form.Group controlId="department">
         <Form.Label>Department</Form.Label>
-        <Form.Control ref = {(input) => this.department = input } as="select" onChange={this.onSearchChange}>
+        <Form.Control ref = {(input) => this.department = input } as="select" onChange={this.onSearchChange} required>
         <option>---Select One---</option>
         { this.props.ListOfDepartments.map((department)=>{
             return <option>{department.department}</option>
@@ -97,7 +110,7 @@ class NewIssue extends Component{
         {/*Select a Faculty*/}
         <Form.Group controlId="faculty">
         <Form.Label>Faculty</Form.Label>
-        <Form.Control ref = {(input) => this.faculty = input } as="select">
+        <Form.Control ref = {(input) => this.faculty = input } as="select" required>
         <option>---Select One---</option>
         {
           this.props.departmentWiseFaculty.filter((combo)=>{
@@ -113,30 +126,35 @@ class NewIssue extends Component{
         {/*Enter a Subject*/}
         <Form.Group controlId="subject">
           <Form.Label>Subject</Form.Label>
-          <Form.Control ref = {(input) => this.subject = input } placeholder="Enter subject" />
+          <Form.Control ref = {(input) => this.subject = input } placeholder="Enter subject" required/>
         </Form.Group>
 
         {/*Enter a Class*/}
         <Form.Group controlId="class">
           <Form.Label>Class</Form.Label>
-          <Form.Control ref = {(input) => this.classes = input } placeholder="Enter Class" />
+          <Form.Control ref = {(input) => this.classes = input } placeholder="Enter Class" required/>
         </Form.Group>
 
         {/*Enter a Duration*/}
         <Form.Group controlId="Time">
           <Form.Label>Time</Form.Label>
-          <Form.Control ref = {(input) => this.time = input } placeholder="Enter Class Duration" />
+          <Form.Control ref = {(input) => this.time = input } placeholder="Enter Class Timings" required/>
         </Form.Group>
 
         {/*Enter a Date*/}
         <Form.Group controlId="date">
           <Form.Label>Date</Form.Label>
-          <Form.Control ref = {(input) => this.date = input } placeholder="Enter Date" />
+          <DatePickerInput
+                onChange={this.calendarOnChange}
+                value={date}
+                className='my-custom-datepicker-component'
+                ref = {(input) => this.cal = input}
+              required/>
         </Form.Group>
 
         <Form.Group controlId="remarks">
           <Form.Label>Remarks</Form.Label>
-          <Form.Control ref = {(input) => this.remarks = input } placeholder="Enter Remarks" />
+          <Form.Control ref = {(input) => this.remarks = input } placeholder="Enter Remarks" required/>
         </Form.Group>
 
         <Form.Row>
@@ -146,7 +164,7 @@ class NewIssue extends Component{
           </Button>
         </Col>
         <Col>
-          <Button variant="primary" type="submit" onClick={(e)=>{this.props.closeNewIssue(e.target)}}>
+          <Button variant="primary" type="submit" onClick={(e)=>{this.props.closeNewIssue("on",e.target)}}>
             Discard
           </Button>
         </Col>
