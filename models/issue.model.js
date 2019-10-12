@@ -10,7 +10,9 @@ const issueSchema = new Schema({
   time : {type: String,required : true},
   date: {type: String, required: true},
   remarks: {type: String},
-  status: {type: String }
+  status: {type: String },
+  reason: {type: String},
+  reasonByHod: {type: String}
 },{
   timestamps: true,
 }, { strict: false });

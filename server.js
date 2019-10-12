@@ -11,7 +11,9 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 const MongoClient = require('mongodb').MongoClient;
-const uri = "mongodb+srv://RiverSong:TheDoctor@cluster0-ostej.gcp.mongodb.net/test?retryWrites=true&w=majority"
+const uri = "mongodb+srv://AQACigdtuw:juhimansi@aqac-ub6hv.gcp.mongodb.net/test?retryWrites=true&w=majority"
+//old uri = "mongodb+srv://RiverSong:TheDoctor@cluster0-ostej.gcp.mongodb.net/test?retryWrites=true&w=majority"
+
 mongoose.connect(uri, { useNewUrlParser: true, useCreateIndex: true });
 mongoose.connection
 .once('open',()=>console.log("Mongo DB database connection established successfully"))
