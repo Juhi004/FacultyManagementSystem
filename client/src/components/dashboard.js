@@ -112,7 +112,7 @@ class Dashboard extends Component{
   {
     return (
       <React.Fragment>
-      <TopBar/>
+      <TopBar name={this.state.facultyName}/>
       {
         <NavBar details={this.state} handleApprove={(_id,str,value)=>this.handleApprove(_id,str,value)} handleReason={(issue,value)=>this.handleReason(issue,value)} handleEdit={(_id)=>this.handleEdit(_id)}/>
       }

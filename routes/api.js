@@ -3,6 +3,22 @@ const router = require('express').Router();
 let Issue = require('../models/issue.model');
 let Faculty = require('../models/faculty.model');
 let Hod = require('../models/hod.model');
+let User = require('../models/user.model');
+
+//This is for changing the password to a new updateOne
+//TODO : this already has a check for if username && password
+router.route('/changePassword').get((req,res) =>{
+   const {username,password,newpassword} = req.headers;
+   User.updateOne({username: username,password: password },{password: newpassword},function(err,response) {
+     if(!err)
+     {
+       res.status(200).json("Success");
+     }else{
+       res.status(500).json("Error"+err);
+     }
+   })
+});
+
 
 //For updating the issue status from pending by HOD to accepted/rejected !!
 //need to apply to check if its actually an HOD requesting and also that the status is pending by HOD in db too
