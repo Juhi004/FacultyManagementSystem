@@ -18,6 +18,35 @@ class NavBar extends Component{
     hasDataList : false,
     hasDPR : false
 };
+
+  getDepartmentList()
+  {
+    // create a new XMLHttpRequest
+    var xhr = new XMLHttpRequest();
+    // get a callback when the server responds
+    xhr.addEventListener('load', () => {
+      // update the state of the component with the result here
+      //console.log(xhr.responseText);
+      this.setState({ListOfDepartments : JSON.parse(xhr.responseText).ListOfDepartments});
+      //TODO : if sucessfull, update the state here and set hasDataList to true
+
+      //Only if the database update was sucessfull !
+      //TODO: Do we need to insert an alert here ?
+    });
+
+    xhr.addEventListener('error', (error) => {
+      console.log("error",error);
+      //TODO : insert a failure message
+    })
+    xhr.addEventListener('abort', () => {
+      console.log("abort");
+    })
+    // open the request with the verb and the url
+    xhr.open('GET', '/api/issueDeptList');
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send();
+  }
+
   getDPR()
   {
     //send a request to db to get data
@@ -27,7 +56,6 @@ class NavBar extends Component{
     // get a callback when the server responds
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
-      //console.log(xhr.responseText);
       this.setState({dprData : JSON.parse(xhr.responseText).dprData ,hasDPR : true});
       //TODO : if sucessfull, update the state here and set hasDPR to true
 
@@ -89,6 +117,7 @@ class NavBar extends Component{
     this.handleNewIssues = this.handleNewIssues.bind(this);
     this.closeNewIssue = this.closeNewIssue.bind(this);
     this.getDataList = this.getDataList.bind(this);
+    this.getDepartmentList = this.getDepartmentList.bind(this);
     this.state = {
       DPRVisible : false,
       AllVisible : false,
@@ -97,8 +126,9 @@ class NavBar extends Component{
       hasDataList : false,
       hasDPR : false
     }
-    this.getDataList()
-    this.getDPR()
+    this.getDataList();
+    this.getDPR();
+    this.getDepartmentList();
   }
   closeNewIssue(target)
   {
@@ -144,12 +174,10 @@ class NavBar extends Component{
         <Navbar.Brand><Button variant="secondary" onClick = {this.handleNewIssues}>Create a new Issue</Button></Navbar.Brand>
         }
       </Navbar>
-      {(this.state.DPRVisible && this.state.hasDPR) ? <Report dprData = {this.state.dprData} /> : null}
-      {(this.state.DPRVisible && !this.state.hasDPR) ? <div>There will be a loader here for DPR!</div> : null}
-      {this.state.AllVisible ? <Issues className='m-2' data={this.props.details} handleApprove={(_id,str)=>this.props.handleApprove(_id,str)} handleEdit={(_id)=>this.props.handleEdit(_id)} work={"dept"}/> : null}
+      {(this.state.DPRVisible && this.state.hasDPR) ? <Report dprData = {this.state.dprData} position={this.props.details.position} ListOfDepartments={this.state.ListOfDepartments}/> : null}
+      {this.state.AllVisible ? <Issues className='m-2' data={this.props.details} handleApprove={(_id,str,value)=>this.props.handleApprove(_id,str,value)} handleEdit={(_id)=>this.props.handleEdit(_id)} work={"dept"}/> : null}
       {this.state.MyVisible ? <Issues className='m-2' data={this.props.details} work={"my"} handleReason={(issue,value)=>this.props.handleReason(issue,value)} /> : null}
-      {(this.state.NewIssueVisible && this.state.hasDataList ) ? <NewIssue data = {this.props} departmentWiseFaculty={this.state.departmentWiseFaculty} closeNewIssue={this.closeNewIssue}/> : null}
-      {(this.state.NewIssueVisible && !this.state.hasDataList) && <div>"There will be a loader here, JUHI"</div>}
+      {(this.state.NewIssueVisible && this.state.hasDataList ) ? <NewIssue data = {this.props} departmentWiseFaculty={this.state.departmentWiseFaculty} closeNewIssue={this.closeNewIssue} ListOfDepartments={this.state.ListOfDepartments}/> : null}
       </React.Fragment>
     );
   }

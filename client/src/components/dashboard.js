@@ -60,7 +60,7 @@ class Dashboard extends Component{
     }));
   }
 
-  handleApprove(_id,str)
+  handleApprove(issue,str,value)
   {
     //code to request the database // @TODO: Do we need to add extra checking to check the username and password combo too?
     // create a new XMLHttpRequest
@@ -72,16 +72,18 @@ class Dashboard extends Component{
       //Only if the database update was sucessfull !
       //TODO: Do we need to insert an alert here ?
 
-      const issues = this.state.issues.map((issue)=>{
-        if(issue._id !== _id)
-        return issue;
+      const issues = this.state.issues.map((item)=>{
+        if(item._id !== issue._id)
+        return item;
         else {
           if(str === "approve")
-          { issue.status = "accepted";
+          { item.status = "accepted";
+            item.reasonByHOD = value;
           return issue;}
           else
-          { issue.status = "rejected";
-          return issue;}
+          { item.status = "rejected";
+            item.reasonByHOD = value;
+          return item;}
         }
       });
       this.setState({'issues':issues});
@@ -101,10 +103,10 @@ class Dashboard extends Component{
     xhr.open('POST', '/api/issue');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify({
-      _id : _id,
-      status : str === "approve" ? "accepted" : "rejected"
+      _id : issue._id,
+      status : str === "approve" ? "accepted" : "rejected",
+      reasonByHOD : value
     }));
-
   }
   render()
   {
@@ -112,7 +114,7 @@ class Dashboard extends Component{
       <React.Fragment>
       <TopBar/>
       {
-        <NavBar details={this.state} handleApprove={(_id,str)=>this.handleApprove(_id,str)} handleReason={(issue,value)=>this.handleReason(issue,value)} handleEdit={(_id)=>this.handleEdit(_id)}/>
+        <NavBar details={this.state} handleApprove={(_id,str,value)=>this.handleApprove(_id,str,value)} handleReason={(issue,value)=>this.handleReason(issue,value)} handleEdit={(_id)=>this.handleEdit(_id)}/>
       }
       </React.Fragment>
     );

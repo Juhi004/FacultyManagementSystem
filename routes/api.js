@@ -13,7 +13,7 @@ router.route('/issue').post((req, res) => {
   Issue.findById(requestObj._id,function(err,data){
     if(!err && data)
     {
-      Issue.updateOne({_id : data._id},{status : requestObj.status},{strict: false},function(err,response) {
+      Issue.updateOne({_id : data._id},{status : requestObj.status,reasonByHOD : requestObj.reasonByHOD},{strict: false},function(err,response) {
         if(!err)
         {
           res.status(200).json("Success");
@@ -85,6 +85,20 @@ router.route('/issueDataList').get((req, res) => {
 
 });
 
+//TODO : Add the password and username checking ? or not !
+//check if actually sir is sending the requests or they are being sent by postman
+router.route('/issueDeptList').get((req, res) => {
+  Hod.find({},{"_id" : 0,"department": 1},function(err,data){
+    if(!err && data)
+    {
+      res.status(200).send(JSON.stringify({"ListOfDepartments" : data}));
+    }else{
+      res.status(500).json("Error"+ err);
+    }
+  });
+
+});
+
 
 //TODO:  for getting the records for getting the departmentReport
 
@@ -96,14 +110,21 @@ router.route('/issueDPR').get((req, res) => {
     Issue.aggregate([
       {
         $group : {
-          _id : '$status',
+          _id: {
+            status : '$status',
+            department : '$department'
+          },
           count : {$sum : 1}
         }
       }
     ],function(err,data){
-      console.log("data",data);
-      console.log("err",err);
-      res.json("HI");
+      if(!err && data)
+      {
+        res.status(200).send(JSON.stringify({"dprData" : data}))
+      }
+      else {
+        res.status(500).json("Error"+err);
+      }
     });
     //get all the issues but department wise
   }else if(position==="HOD")
@@ -111,15 +132,24 @@ router.route('/issueDPR').get((req, res) => {
     //get only the issues of this particular department
     Issue.aggregate([
       {
+        $match : {
+          department : department
+        },
+      },
+      {
         $group : {
           _id : '$status',
           count : {$sum : 1}
         }
       }
     ],function(err,data){
-      console.log("data",data);
-      console.log("err",err);
-      res.json({HI:"Hi"});
+      if(!err && data)
+      {
+        res.status(200).send(JSON.stringify({"dprData" : data}))
+      }
+      else {
+        res.status(500).json("Error"+err);
+      }
     });
   }else{
     res.status(500).json("Error" + "this is not a valid request");

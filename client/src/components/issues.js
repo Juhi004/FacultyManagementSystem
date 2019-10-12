@@ -18,8 +18,10 @@ class Issues extends Component{
     this.handleClick = this.handleClick.bind(this);
     this.submitReason = this.submitReason.bind(this);
     this.closeModal = this.closeModal.bind(this);
+    this.handleReasonbyHOD = this.handleReasonbyHOD.bind(this);
+    this.submitReasonbyHOD = this.submitReasonbyHOD.bind(this);
   }
-  state={display:false,displayReason:false};
+  state={display:false,displayReason:false,displayHODReason:false};
 
   closeModal(target,str)
   {
@@ -27,8 +29,10 @@ class Issues extends Component{
     {
       if(str==="ISSUE")
       this.setState({display:false});
-      else
+      else if(str==="REASON")
       this.setState({displayReason:false});
+      else
+      this.setState({displayHODReason:false});
     }
   }
   handleEdit(issue)
@@ -44,6 +48,15 @@ class Issues extends Component{
   {
     this.setState({displayReason: false})
     this.props.handleReason(issue,value);
+  }
+  handleReasonbyHOD(issue,str)
+  {
+     this.setState({issue,displayHODReason :true,reasonStr : str});
+  }
+  submitReasonbyHOD(issue,value)
+  {
+    this.setState({displayHODReason : false})
+    this.props.handleApprove(issue,this.state.reasonStr,value)
   }
   handleClick(issue,target)
   {
@@ -92,10 +105,16 @@ class Issues extends Component{
          {
            /*this.props.data.position === "DEA" && <Button onClick={()=>this.props.handleEdit(issue)} className = 'm-2'>Edit</Button>*/
            /*This might be removed*/
+           /*definitely removed :-P */
+          /* onClick={()=>{this.props.handleApprove(issue._id,"approve")}}
+           onClick={()=>{this.props.handleApprove(issue._id,"reject")}}*/
          }
-         {(this.props.work === "dept" && this.props.data.position === "HOD" && issue.status === "pending by HOD") && <Button variant="success" onClick={()=>{this.props.handleApprove(issue._id,"approve")}} className = 'm-2'>Approve</Button>}
-         {(this.props.work === "dept" && this.props.data.position === "HOD" && issue.status === "pending by HOD") && <Button variant="danger" onClick={()=>{this.props.handleApprove(issue._id,"reject")}} className = 'm-2'>Reject</Button>}
-         {(this.props.work === "my" && (issue.status === "pending" || issue.status === "pending by HOD" ) ) && <Button onClick={()=>this.handleReason(issue)} className = 'm-2'>Submit Reason</Button>}
+         {(this.props.work === "dept" && this.props.data.position === "HOD" && issue.status === "pending by HOD") && <Button variant="success" onClick={()=>{this.handleReasonbyHOD(issue,"approve")}} className = 'm-2'>Approve</Button>}
+         {(this.props.work === "dept" && this.props.data.position === "HOD" && issue.status === "pending by HOD") && <Button variant="danger" onClick={()=>{this.handleReasonbyHOD(issue,"reject")}} className = 'm-2'>Reject</Button>}
+         {(this.props.work === "my" && (issue.status === "pending" || issue.status === "pending by HOD" ) ) && <Button onClick={()=>this.handleReason(issue)} className = 'm-2'>
+          {issue.reason === undefined  && <React.Fragment>Submit Reason</React.Fragment>}
+          {issue.reason !== undefined && <React.Fragment>Edit Reason</React.Fragment>}
+         </Button>}
          </tr> )
        }
      })
@@ -114,12 +133,24 @@ class Issues extends Component{
     <Modal.Dialog>
     <Modal.Header closeButton={true} onClick={(e)=>this.closeModal(e.target,"REASON")}>Reason For Absence!</Modal.Header>
     <Modal.Body>
-    <textarea type ="text" rows="5" ref={(input)=>this.reason = input}></textarea><br></br>
+    <textarea type ="text" rows="5" ref={(input)=>this.reason = input}>{this.state.issue.reason !== undefined && this.state.issue.reason}</textarea><br></br>
     <Button className='m-2' onClick={()=>{this.submitReason(this.state.issue,this.reason.value);}}>Add</Button>
     </Modal.Body>
     </Modal.Dialog>
     </div>
   }
+  {
+    this.state.displayHODReason===true &&
+     <div class="addReason rollTheLoader">
+     <Modal.Dialog>
+     <Modal.Header closeButton={true} onClick={(e)=>this.closeModal(e.target,"HODREASON")}>Reason For Approval/Rejection !</Modal.Header>
+     <Modal.Body>
+     <textarea type ="text" rows="5" ref={(input)=>this.reasonHOD = input}></textarea><br></br>
+     <Button className='m-2' onClick={()=>{this.submitReasonbyHOD(this.state.issue,this.reasonHOD.value);}}>Add</Button>
+     </Modal.Body>
+     </Modal.Dialog>
+     </div>
+   }
  </React.Fragment>
     );
   }

@@ -11,12 +11,10 @@ class NewIssue extends Component{
   state={
     searchTerm : '',
     //do we need to put the departments into a database document too ?
-    departments: ["CSE","ECE","MAE","Arch.","ASH"]
   };
   constructor(props)
   {
     super(props);
-    console.log(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.onSearchChange = this.onSearchChange.bind(this);
   }
@@ -89,8 +87,8 @@ class NewIssue extends Component{
         <Form.Label>Department</Form.Label>
         <Form.Control ref = {(input) => this.department = input } as="select" onChange={this.onSearchChange}>
         <option>---Select One---</option>
-        { this.state.departments.map((department)=>{
-            return <option>{department}</option>
+        { this.props.ListOfDepartments.map((department)=>{
+            return <option>{department.department}</option>
         })
         }
         </Form.Control>
