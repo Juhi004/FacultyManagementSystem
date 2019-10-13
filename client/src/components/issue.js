@@ -13,11 +13,19 @@ class Issue extends Component{
   {
     super(props);
   }
+  componentDidMount()
+  {
+    document.getElementById("myIssue").scrollIntoView();
+    const height = document.getElementsByTagName("body")[0].clientHeight;
+    const myElement = document.getElementById("myIssue");
+    myElement.style.height = (height*1.7).toString() +"px";
+  }
   //Render method for the issue
   render()
   {
     return (
-      <Row className="singleIssue rollTheLoader">
+      <div class = "forIssue"  id = "myIssue" >
+      <Row className="singleIssue">
       <Modal.Dialog>
       {/*Add id of issue as per state */}
       <Modal.Header closeButton onClick={(e)=>this.props.closeModal(e.target,"ISSUE")}>
@@ -97,6 +105,7 @@ class Issue extends Component{
 
       </Modal.Dialog>
       </Row>
+      </div>
     );
   }
 

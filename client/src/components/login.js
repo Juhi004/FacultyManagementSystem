@@ -46,11 +46,16 @@ class LoginForm extends Component {
     // get a callback when the server responds
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
-      responseObject = xhr.responseText;
-      if(JSON.parse(xhr.responseText).facultyName !== undefined)
-      this.setState({showDashboard: true,showLoginForm: false,showLoader:false,showAlert:false,data : JSON.parse(responseObject)});
-      else
-      this.setState({showLoader:false,showAlert:true});
+      if(xhr.status === 200)
+      {
+        responseObject = xhr.responseText;
+        if(JSON.parse(xhr.responseText).facultyName !== undefined)
+        this.setState({showDashboard: true,showLoginForm: false,showLoader:false,showAlert:false,data : JSON.parse(responseObject)});
+        else
+        this.setState({showLoader:false,showAlert:true});
+      }else{
+        this.setState({showLoader:false,showAlert:true});
+      }
     })
     xhr.addEventListener('error', (error) => {
       console.log("error",error);

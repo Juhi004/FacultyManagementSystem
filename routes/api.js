@@ -177,7 +177,7 @@ router.route('/issueDPR').get((req, res) => {
 
 router.route('/issues').get((req, res) => {
   Issue.find()
-    .then(issues => res.json(issues))
+    .then(issues => res.status(200).json(issues))
     .catch(err => res.status(400).json('Error: '+ err));
 });
 

@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import style from 'bootstrap/dist/css/bootstrap.css';
 import TopBar from './header';
 import NavBar from './navbar';
+import Alert from 'react-bootstrap/Alert';
 
 class Dashboard extends Component{
   state : {};
@@ -12,6 +13,8 @@ class Dashboard extends Component{
     this.handleEdit = this.handleEdit.bind(this);
     this.handleReason = this.handleReason.bind(this);
     this.state = this.props.data;
+    this.state.showDangerAlert = false;
+    this.state.showSucessAlert = false;
   }
   handleEdit(_id)
   {
@@ -26,27 +29,33 @@ class Dashboard extends Component{
     // get a callback when the server responds
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
-      console.log(xhr.responseText);
       //Only if the database update was sucessfull !
       //TODO: Do we need to insert an alert here ?
-      const issues = this.state.issues.map((item)=>{
-        if(item._id !== issue._id)
-        return item;
-        else {
-          item.status = "pending by HOD";
-          item.reason = value;
+      if(xhr.status === 200)
+      {
+        const issues = this.state.issues.map((item)=>{
+          if(item._id !== issue._id)
           return item;
-        }
-      });
-      this.setState({'issues':issues});
+          else {
+            item.status = "pending by HOD";
+            item.reason = value;
+            return item;
+          }
+        });
+        this.setState({'issues':issues,showSucessAlert: true,showDangerAlert: false});
+      }else{
+        this.setState({showSucessAlert: false,showDangerAlert: true});
+      }
+
     });
 
     xhr.addEventListener('error', (error) => {
       console.log("error",error);
-      //TODO : insert a failure message
+      this.setState({showDangerAlert : true,showSucessAlert: false});
     })
     xhr.addEventListener('abort', () => {
       console.log("abort");
+      this.setState({showDangerAlert : true,showSucessAlert: false});
     })
 
     // open the request with the verb and the url
@@ -71,7 +80,8 @@ class Dashboard extends Component{
       //console.log(xhr.responseText);
       //Only if the database update was sucessfull !
       //TODO: Do we need to insert an alert here ?
-
+      if(xhr.status === 200)
+      {
       const issues = this.state.issues.map((item)=>{
         if(item._id !== issue._id)
         return item;
@@ -86,15 +96,19 @@ class Dashboard extends Component{
           return item;}
         }
       });
-      this.setState({'issues':issues});
-
+      this.setState({'issues':issues,showSucessAlert: true, showDangerAlert: false});
+    }else{
+      this.setState({showDangerAlert : true,showSucessAlert: false});
+    }
     })
 
     xhr.addEventListener('error', (error) => {
+      this.setState({showDangerAlert : true,showSucessAlert: false});
       console.log("error",error);
       //TODO : insert a failure message
     })
     xhr.addEventListener('abort', () => {
+      this.setState({showDangerAlert : true,showSucessAlert: false});
       console.log("abort");
     })
 
@@ -112,6 +126,22 @@ class Dashboard extends Component{
   {
     return (
       <React.Fragment>
+      {
+        this.state.showDangerAlert === true &&
+        <Alert variant="danger" onClose={() => this.setState({showDangerAlert:false})} dismissible>
+            <Alert.Heading>Error</Alert.Heading>
+            Could not perform the action
+            Check your internet connection
+          </Alert>
+        }
+        {
+          this.state.showSucessAlert === true &&
+          <Alert variant="success" onClose={() => this.setState({showSucessAlert:false})} dismissible>
+              <Alert.Heading>Sucess</Alert.Heading>
+              The changes were made!
+            </Alert>
+          }
+
       <TopBar name={this.state.facultyName}/>
       {
         <NavBar details={this.state} handleApprove={(_id,str,value)=>this.handleApprove(_id,str,value)} handleReason={(issue,value)=>this.handleReason(issue,value)} handleEdit={(_id)=>this.handleEdit(_id)}/>

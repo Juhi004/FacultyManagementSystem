@@ -59,7 +59,10 @@ class NewIssue extends Component{
      xhr.addEventListener('load', () => {
        // update the state of the component with the result here
        //console.log(xhr.responseText);
-       this.props.closeNewIssue("close","target");
+       if(xhr.status === 200)
+       this.props.closeNewIssue("close","success");
+       else
+       this.props.closeNewIssue("close","fail")
        //Only if the database update was sucessfull !
        //TODO: Do we need to insert an alert here ?
        //TODO : do we need to make any changes to the UI, although the success message is a must here

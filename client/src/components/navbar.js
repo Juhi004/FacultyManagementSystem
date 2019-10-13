@@ -20,7 +20,9 @@ class NavBar extends Component{
     hasDPR : false,
     showListAlert : false,
     showReportAlert : false,
-    hasListOfDepartments: false
+    hasListOfDepartments: false,
+    showSucessAlert: false,
+    showDangerAlert : false
 };
 
   getDepartmentList()
@@ -31,7 +33,13 @@ class NavBar extends Component{
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
       //console.log(xhr.responseText);
-      this.setState({ListOfDepartments : JSON.parse(xhr.responseText).ListOfDepartments,hasListOfDepartments : true});
+      if(xhr.status === 200)
+      {
+        this.setState({ListOfDepartments : JSON.parse(xhr.responseText).ListOfDepartments,hasListOfDepartments : true});
+      }
+      else {
+        this.setState({showListAlert : true});
+      }
       //TODO : if sucessfull, update the state here and set hasDataList to true
 
       //Only if the database update was sucessfull !
@@ -62,7 +70,10 @@ class NavBar extends Component{
     // get a callback when the server responds
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
+      if(xhr.status === 200)
       this.setState({dprData : JSON.parse(xhr.responseText).dprData ,hasDPR : true});
+      else
+      this.setState({showReportAlert: true});
       //TODO : if sucessfull, update the state here and set hasDPR to true
 
       //Only if the database update was sucessfull !
@@ -96,7 +107,10 @@ class NavBar extends Component{
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
       //console.log(xhr.responseText);
+      if(xhr.status === 200)
       this.setState({departmentWiseFaculty : JSON.parse(xhr.responseText).departmentWiseFaculty ,hasDataList : true});
+      else
+      this.setState({showListAlert:true});
       //TODO : if sucessfull, update the state here and set hasDataList to true
 
       //Only if the database update was sucessfull !
@@ -145,6 +159,12 @@ class NavBar extends Component{
     if(str==="close" || (target.nodeName==="SPAN" || target.nodeName==="BUTTON" ))
     {
       this.setState({NewIssueVisible:false});
+      if(target==="success")
+      {
+        this.setState({showDangerAlert: false, showSucessAlert: true,MyVisible : true});
+      }else{
+        this.setState({showDangerAlert: true, showSucessAlert: false,MyVisible : true});
+      }
     }
   }
   handleMyIssues(){
@@ -180,6 +200,21 @@ class NavBar extends Component{
               Please Check your internet connection
             </Alert>
           }
+        {
+          this.state.showDangerAlert === true &&
+          <Alert variant="danger" onClose={() => this.setState({showDangerAlert:false})} dismissible>
+              <Alert.Heading>Error</Alert.Heading>
+              Could not create the issue !
+              Check your internet connection
+            </Alert>
+        }
+        {
+          this.state.showSucessAlert === true &&
+          <Alert variant="success" onClose={() => this.setState({showSucessAlert:false})} dismissible>
+              <Alert.Heading>Sucess</Alert.Heading>
+              Issue created !
+            </Alert>
+        }
 
       <Navbar expand="xl" bg="dark" variant="dark" className='mt-3'>
         <Navbar.Brand><Button variant="secondary" onClick = {this.handleMyIssues}>My Issues</Button></Navbar.Brand>

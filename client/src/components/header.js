@@ -4,6 +4,7 @@ import style from 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import Alert from 'react-bootstrap/Alert';
 
 class TopBar extends Component{
   state = {};
@@ -13,6 +14,8 @@ class TopBar extends Component{
     this.state = {
       displayPassword : false
     }
+    this.state.showDangerAlert = false;
+    this.state.showSucessAlert = false;
     this.changePassword = this.changePassword.bind(this);
     this.showModal = this.showModal.bind(this);
     this.closePass = this.closePass.bind(this);
@@ -37,6 +40,12 @@ class TopBar extends Component{
       //TODO : if sucessfull, update the state here and set hasDPR to true
       //Only if the database update was sucessfull !
       //TODO: Do we need to insert an alert here ?
+      if(xhr.status === 200)
+      {
+        this.setState({showDangerAlert : false,showSucessAlert: true})
+      }else{
+        this.setState({showDangerAlert : true,showSucessAlert: false})
+      }
     });
 
     xhr.addEventListener('error', (error) => {
@@ -64,6 +73,21 @@ class TopBar extends Component{
         {this.props.name !== undefined && <Navbar.Brand className = 'm-3'>{this.props.name}</Navbar.Brand>}
         {this.props.name !== undefined && <Button onClick={this.showModal}>Reset Password</Button>}
       </Navbar>
+      {
+        this.state.showDangerAlert === true &&
+        <Alert variant="danger" onClose={() => this.setState({showDangerAlert:false})} dismissible>
+            <Alert.Heading>Error</Alert.Heading>
+            Could not reset password
+          </Alert>
+        }
+        {
+          this.state.showSucessAlert === true &&
+          <Alert variant="success" onClose={() => this.setState({showSucessAlert:false})} dismissible>
+              <Alert.Heading>Sucess</Alert.Heading>
+              Password has been reset
+            </Alert>
+          }
+
       {
         this.state.displayPassword &&
          <div class="addReason rollTheLoader">

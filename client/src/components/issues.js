@@ -1,4 +1,4 @@
- import React, {Component} from 'react';
+import React, {Component} from 'react';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import Col from 'react-bootstrap/Col';
@@ -23,6 +23,23 @@ class Issues extends Component{
   }
   state={display:false,displayReason:false,displayHODReason:false};
 
+  componentDidUpdate()
+  {
+    if(this.state.displayReason && document.getElementById("displayReason") !== null && document.getElementById("displayReason") !== undefined)
+    {
+      const height = document.getElementsByTagName("body")[0].clientHeight;
+      document.getElementById("displayReason").scrollIntoView();
+      const myElement = document.getElementById("displayReason");
+      myElement.style.height = (height*1.7).toString() +"px";
+    }
+    if(this.state.displayHODReason && document.getElementById("HODReason") !== null && document.getElementById("HODReason") !== undefined)
+    {
+      const height = document.getElementsByTagName("body")[0].clientHeight;
+      document.getElementById("HODReason").scrollIntoView();
+      const myElement = document.getElementById("HODReason");
+      myElement.style.height = (height*1.7).toString() +"px";
+    }
+  }
   closeModal(target,str)
   {
     if((target.nodeName==="SPAN" || target.nodeName==="BUTTON" ) )
@@ -61,7 +78,9 @@ class Issues extends Component{
   handleClick(issue,target)
   {
     if(target.nodeName !== "BUTTON")
-    this.setState({issue,display:true,displayReason:false});
+    {
+      this.setState({issue,display:true,displayReason:false});
+    }
   }
 
   render()
@@ -125,9 +144,10 @@ class Issues extends Component{
  {
    this.state.display===true && <Issue details={this.state.issue} closeModal={this.closeModal}/>
  }
+
  {
    this.state.displayReason===true &&
-    <div class="addReason rollTheLoader">
+    <div class="addReason rollTheLoader" id = "displayReason">
     <Modal.Dialog>
     <Modal.Header closeButton={true} onClick={(e)=>this.closeModal(e.target,"REASON")}>Reason For Absence!</Modal.Header>
     <Modal.Body>
@@ -139,7 +159,7 @@ class Issues extends Component{
   }
   {
     this.state.displayHODReason===true &&
-     <div class="addReason rollTheLoader">
+     <div class="addReason rollTheLoader" id="HODReason">
      <Modal.Dialog>
      <Modal.Header closeButton={true} onClick={(e)=>this.closeModal(e.target,"HODREASON")}>Reason For Approval/Rejection !</Modal.Header>
      <Modal.Body>
