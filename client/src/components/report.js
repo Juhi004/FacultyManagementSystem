@@ -9,7 +9,6 @@ class Report extends Component{
   constructor(props)
   {
       super(props);
-      console.log(props);
       this.updateChart = this.updateChart.bind(this);
       this.state = {
         labels : ['accepted','rejected','pending','pending by HOD'],

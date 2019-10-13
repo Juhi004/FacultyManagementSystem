@@ -7,6 +7,7 @@ import NewIssue from './newIssue';
 import Report from './report';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Alert from 'react-bootstrap/Alert';
 
 class NavBar extends Component{
   //What if I load the data here ?
@@ -16,7 +17,10 @@ class NavBar extends Component{
     MyVisible : true,
     NewIssueVisible : false,
     hasDataList : false,
-    hasDPR : false
+    hasDPR : false,
+    showListAlert : false,
+    showReportAlert : false,
+    hasListOfDepartments: false
 };
 
   getDepartmentList()
@@ -27,7 +31,7 @@ class NavBar extends Component{
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
       //console.log(xhr.responseText);
-      this.setState({ListOfDepartments : JSON.parse(xhr.responseText).ListOfDepartments});
+      this.setState({ListOfDepartments : JSON.parse(xhr.responseText).ListOfDepartments,hasListOfDepartments : true});
       //TODO : if sucessfull, update the state here and set hasDataList to true
 
       //Only if the database update was sucessfull !
@@ -35,10 +39,12 @@ class NavBar extends Component{
     });
 
     xhr.addEventListener('error', (error) => {
+      this.setState({showListAlert : true});
       console.log("error",error);
       //TODO : insert a failure message
     })
     xhr.addEventListener('abort', () => {
+      this.setState({showListAlert : true});
       console.log("abort");
     })
     // open the request with the verb and the url
@@ -64,10 +70,12 @@ class NavBar extends Component{
     });
 
     xhr.addEventListener('error', (error) => {
+      this.setState({showReportAlert: true});
       console.log("error",error);
       //TODO : insert a failure message
     })
     xhr.addEventListener('abort', () => {
+      this.setState({showReportAlert: true});
       console.log("abort");
     })
     // open the request with the verb and the url
@@ -96,10 +104,12 @@ class NavBar extends Component{
     });
 
     xhr.addEventListener('error', (error) => {
+      this.setState({showListAlert:true});
       console.log("error",error);
       //TODO : insert a failure message
     })
     xhr.addEventListener('abort', () => {
+      this.setState({showListAlert:true});
       console.log("abort");
     })
     // open the request with the verb and the url
@@ -154,6 +164,23 @@ class NavBar extends Component{
   {
     return (
       <React.Fragment>
+      {
+        this.state.showListAlert === true &&
+        <Alert variant="danger" onClose={() => this.setState({showListAlert:false})} dismissible>
+            <Alert.Heading>Error</Alert.Heading>
+            Could not download the list of departments
+            Please Check your internet connection
+          </Alert>
+        }
+        {
+          this.state.showReportAlert === true &&
+          <Alert variant="danger" onClose={() => this.setState({showReportAlert:false})} dismissible>
+              <Alert.Heading>Error</Alert.Heading>
+              Could not download the department report
+              Please Check your internet connection
+            </Alert>
+          }
+
       <Navbar expand="xl" bg="dark" variant="dark" className='mt-3'>
         <Navbar.Brand><Button variant="secondary" onClick = {this.handleMyIssues}>My Issues</Button></Navbar.Brand>
         {/*Only HOD and Dean can see All issues*/}
@@ -174,10 +201,10 @@ class NavBar extends Component{
         <Navbar.Brand><Button variant="secondary" onClick = {this.handleNewIssues}>Create a new Issue</Button></Navbar.Brand>
         }
       </Navbar>
-      {(this.state.DPRVisible && this.state.hasDPR) ? <Report dprData = {this.state.dprData} position={this.props.details.position} ListOfDepartments={this.state.ListOfDepartments}/> : null}
+      {(this.state.DPRVisible && this.state.hasDPR && this.state.hasListOfDepartments) ? <Report dprData = {this.state.dprData} position={this.props.details.position} ListOfDepartments={this.state.ListOfDepartments}/> : null}
       {this.state.AllVisible ? <Issues className='m-2' data={this.props.details} handleApprove={(_id,str,value)=>this.props.handleApprove(_id,str,value)} handleEdit={(_id)=>this.props.handleEdit(_id)} work={"dept"}/> : null}
       {this.state.MyVisible ? <Issues className='m-2' data={this.props.details} work={"my"} handleReason={(issue,value)=>this.props.handleReason(issue,value)} /> : null}
-      {(this.state.NewIssueVisible && this.state.hasDataList ) ? <NewIssue data = {this.props} departmentWiseFaculty={this.state.departmentWiseFaculty} closeNewIssue={(str,target)=>this.closeNewIssue(str,target)} ListOfDepartments={this.state.ListOfDepartments}/> : null}
+      {(this.state.NewIssueVisible && this.state.hasDataList  && this.state.hasListOfDepartments) ? <NewIssue data = {this.props} departmentWiseFaculty={this.state.departmentWiseFaculty} closeNewIssue={(str,target)=>this.closeNewIssue(str,target)} ListOfDepartments={this.state.ListOfDepartments}/> : null}
       </React.Fragment>
     );
   }
