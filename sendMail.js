@@ -19,7 +19,7 @@ sendMail.sendMail = function(reciever){
   from: 'aqac.igdtuw@gmail.com',
   to: reciever,
   subject: 'Alert from AQAC-igdtuw',
-  text: 'Some activity has occured and it needs your attention. Kindly login in your Faculty Management System Account to review it.'
+  text: 'Some activity has occured and it might need your attention. Kindly login in your Faculty Management System Account to review it.'
   };
 
   transporter.sendMail(mailOptions, function(error, info){

@@ -56,13 +56,11 @@ router.route('/issueCreate').post((req, res) => {
   Issue.create(requestObj,function(err,data){
     if(!err && data)
     {
-    
+
       res.status(200).json(data);
-      console.log(typeof(req.body.facultyName));
       User.findOne({username : req.body.facultyName},function(err,data){
-        console.log(data.email);
+        sendMail.sendMail(data.email);
       });
-      //sendMail();
     }else{
       res.status(500).json("Error"+ err);
     }
@@ -84,6 +82,15 @@ router.route('/issueReason').post((req, res) => {
         if(!err)
         {
           res.status(200).json("Success");
+          Hod.find({department : req.body.department},function(err,response){
+            console.log(response.name);
+            if(!err && data)
+            {
+                User.find({username : response.name},function(err,responseData){
+                  console.log(responseData.email);
+                })
+            }
+          });
         }else{
           res.status(500).json("Error"+err);
         }
