@@ -5,6 +5,8 @@ let Faculty = require('../models/faculty.model');
 let Hod = require('../models/hod.model');
 let User = require('../models/user.model');
 
+let sendMail = require('../sendMail.js');
+
 //This is for changing the password to a new updateOne
 //TODO : this already has a check for if username && password
 router.route('/changePassword').get((req,res) =>{
@@ -55,6 +57,11 @@ router.route('/issueCreate').post((req, res) => {
     if(!err && data)
     {
       res.status(200).json(data);
+      console.log(typeof(req.body.facultyName));
+      User.findOne({username : req.body.facultyName},function(err,data){
+        console.log(data);
+      });
+      //sendMail();
     }else{
       res.status(500).json("Error"+ err);
     }

@@ -2,6 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const path = require('path');
+const nodemailer = require('nodemailer');
+const sendMail = require(__dirname + '/'+ 'sendMail.js');
+/*let Issue = require('../models/issue.model');
+let User = require('../models/user.model');1*/
 
 const app = express();
 const port = process.env.PORT || 5000;
