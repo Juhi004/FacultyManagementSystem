@@ -56,10 +56,11 @@ router.route('/issueCreate').post((req, res) => {
   Issue.create(requestObj,function(err,data){
     if(!err && data)
     {
+    
       res.status(200).json(data);
       console.log(typeof(req.body.facultyName));
       User.findOne({username : req.body.facultyName},function(err,data){
-        console.log(data);
+        console.log(data.email);
       });
       //sendMail();
     }else{
