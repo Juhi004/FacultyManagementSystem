@@ -1,7 +1,10 @@
 .logo{
     height : 10vh;
 }
-
+.shiftRight{
+  position: fixed;
+  right : 1vw !important;
+}
 .singleIssue{
   display: inline-block;
   position: absolute !important;

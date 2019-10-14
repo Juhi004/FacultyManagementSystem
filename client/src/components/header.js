@@ -70,8 +70,10 @@ class TopBar extends Component{
       <React.Fragment>
       <Navbar expand="xl" bg="dark" variant="dark">
         <Navbar.Brand className = 'm-3'>FACULTY MANAGEMENT SYSTEM</Navbar.Brand>
+        <div class = "shiftRight">
         {this.props.name !== undefined && <Navbar.Brand className = 'm-3'>{this.props.name}</Navbar.Brand>}
         {this.props.name !== undefined && <Button onClick={this.showModal}>Reset Password</Button>}
+        </div>
       </Navbar>
       {
         this.state.showDangerAlert === true &&
