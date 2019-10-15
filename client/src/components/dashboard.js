@@ -29,8 +29,6 @@ class Dashboard extends Component{
     // get a callback when the server responds
     xhr.addEventListener('load', () => {
       // update the state of the component with the result here
-      //Only if the database update was sucessfull !
-      //TODO: Do we need to insert an alert here ?
       if(xhr.status === 200)
       {
         const issues = this.state.issues.map((item)=>{

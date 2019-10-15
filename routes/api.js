@@ -34,6 +34,10 @@ router.route('/issue').post((req, res) => {
       Issue.updateOne({_id : data._id},{status : requestObj.status,reasonByHOD : requestObj.reasonByHOD},{strict: false},function(err,response) {
         if(!err)
         {
+          User.find({dashCode: 0},function(err,responseData){
+              console.log("Uncomment this to send mail to sir");
+              //sendMail.sendMail(responseData[0].email);
+            })
           res.status(200).json("Success");
         }else{
           res.status(500).json("Error"+err);
@@ -82,13 +86,12 @@ router.route('/issueReason').post((req, res) => {
         if(!err)
         {
           res.status(200).json("Success");
-          Hod.find({department : req.body.department},function(err,response){
-            console.log(response.name);
-            if(!err && data)
+          Hod.find({department : data.department},function(err,response){
+          if(!err && response)
             {
-                User.find({username : response.name},function(err,responseData){
-                  console.log(responseData.email);
-                })
+              User.find({username : response[0].name},function(err,responseData){
+                  sendMail.sendMail(responseData[0].email);
+                });
             }
           });
         }else{

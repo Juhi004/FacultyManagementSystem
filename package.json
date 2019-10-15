@@ -18,5 +18,8 @@
     "validator": "^11.1.0",
     "node-cron": "^2.0.3",
     "nodemailer": "^6.3.1"
+  },
+  "devDependencies": {
+    "pdfkit": "^0.10.0"
   }
 }

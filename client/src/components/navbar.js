@@ -131,6 +131,39 @@ class NavBar extends Component{
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send();
   }
+  generateReport()
+  {
+    // create a new XMLHttpRequest
+    var xhr = new XMLHttpRequest();
+    // get a callback when the server responds
+    xhr.addEventListener('load', () => {
+      // update the state of the component with the result here
+      console.log(xhr.responseText);
+      //console.log((encodeURIComponent(xhr.responseText)));
+      /*var link=document.createElement('a');
+      link.href=window.URL.createObjectURL(blob);
+      link.download="myFileName.pdf";
+      link.click();*/
+     /*var element = document.createElement('a');
+      element.setAttribute('href', "data:application/octet-stream;base64," + encodeURIComponent(xhr.responseText));
+      element.setAttribute('download', "mansi.pdf");
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);*/
+    });
+
+    xhr.addEventListener('error', (error) => {
+      console.log("error",error);
+    })
+    xhr.addEventListener('abort', () => {
+      console.log("abort");
+    })
+    // open the request with the verb and the url
+    xhr.open('POST', '/pdf');
+    xhr.setRequestHeader('Content-Type','application/json');
+    xhr.send();
+  }
 
   constructor(props)
   {
@@ -142,6 +175,7 @@ class NavBar extends Component{
     this.closeNewIssue = this.closeNewIssue.bind(this);
     this.getDataList = this.getDataList.bind(this);
     this.getDepartmentList = this.getDepartmentList.bind(this);
+    this.generateReport = this.generateReport.bind(this);
     this.state = {
       DPRVisible : false,
       AllVisible : false,
@@ -185,7 +219,7 @@ class NavBar extends Component{
     return (
       <React.Fragment>
       {
-        this.state.showListAlert === true &&
+        (this.state.showListAlert === true && this.props.details.position !== "professor")&&
         <Alert variant="danger" onClose={() => this.setState({showListAlert:false})} dismissible>
             <Alert.Heading>Error</Alert.Heading>
             Could not download the list of departments
@@ -193,7 +227,7 @@ class NavBar extends Component{
           </Alert>
         }
         {
-          this.state.showReportAlert === true &&
+          (this.state.showReportAlert === true && this.props.details.position !== "professor") &&
           <Alert variant="danger" onClose={() => this.setState({showReportAlert:false})} dismissible>
               <Alert.Heading>Error</Alert.Heading>
               Could not download the department report
@@ -233,7 +267,10 @@ class NavBar extends Component{
         {/*Only Dean can create an issue*/}
         {
         this.props.details.position === "DEAN" &&
+        <React.Fragment>
         <Navbar.Brand><Button variant="secondary" onClick = {this.handleNewIssues}>Create a new Issue</Button></Navbar.Brand>
+        <Navbar.Brand><Button variant="success" onClick = {this.generateReport}>Generate Report</Button></Navbar.Brand>
+        </React.Fragment>
         }
       </Navbar>
       {(this.state.DPRVisible && this.state.hasDPR && this.state.hasListOfDepartments) ? <Report dprData = {this.state.dprData} position={this.props.details.position} ListOfDepartments={this.state.ListOfDepartments}/> : null}

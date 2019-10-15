@@ -27,7 +27,7 @@ const usersRouter = require('./routes/users');
 const apiRouter = require('./routes/api');
 const facultyRouter = require('./routes/faculty');
 const loginRouter = require('./routes/login');
-
+const generatePDF = require('./routes/generatePDF');
 //this is for the npm build
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
@@ -37,7 +37,7 @@ app.use('/users', usersRouter);
 app.use('/api', apiRouter);
 app.use('/faculty', facultyRouter);
 app.use('/login', loginRouter);
-
+app.use('/pdf', generatePDF);
 app.listen(port, () => {
     console.log(`Server is running on port: ${port}`);
 });
