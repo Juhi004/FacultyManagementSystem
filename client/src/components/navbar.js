@@ -8,6 +8,7 @@ import Report from './report';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Alert from 'react-bootstrap/Alert';
+import axios from "axios";
 
 class NavBar extends Component{
   //What if I load the data here ?
@@ -131,39 +132,26 @@ class NavBar extends Component{
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send();
   }
-  generateReport()
-  {
-    // create a new XMLHttpRequest
-    var xhr = new XMLHttpRequest();
-    // get a callback when the server responds
-    xhr.addEventListener('load', () => {
-      // update the state of the component with the result here
-      console.log(xhr.responseText);
-      //console.log((encodeURIComponent(xhr.responseText)));
-      /*var link=document.createElement('a');
-      link.href=window.URL.createObjectURL(blob);
-      link.download="myFileName.pdf";
-      link.click();*/
-     /*var element = document.createElement('a');
-      element.setAttribute('href', "data:application/octet-stream;base64," + encodeURIComponent(xhr.responseText));
-      element.setAttribute('download', "mansi.pdf");
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);*/
-    });
-
-    xhr.addEventListener('error', (error) => {
-      console.log("error",error);
-    })
-    xhr.addEventListener('abort', () => {
-      console.log("abort");
-    })
-    // open the request with the verb and the url
-    xhr.open('POST', '/pdf');
-    xhr.setRequestHeader('Content-Type','application/json');
-    xhr.send();
-  }
+  generateReport =  async () => {
+          axios('/pdf', {
+            method: "GET",
+            responseType: "blob"
+            //Force to receive data in a Blob Format
+          })
+          .then(response => {
+            //Create a Blob from the PDF Stream
+            const file = new Blob([response.data], {
+              type: "application/pdf"
+            });
+            //Build a URL from the file
+            const fileURL = URL.createObjectURL(file);
+            //Open the URL on new Window
+            window.open(fileURL);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+        };
 
   constructor(props)
   {
