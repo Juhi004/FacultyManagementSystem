@@ -1,17 +1,18 @@
 const router = require('express').Router();
-
 let Issue = require('../models/issue.model');
 let Faculty = require('../models/faculty.model');
 let Hod = require('../models/hod.model');
 let User = require('../models/user.model');
-
+const crypto = require('crypto');
 let sendMail = require('../sendMail.js');
 
 //This is for changing the password to a new updateOne
 //TODO : this already has a check for if username && password
 router.route('/changePassword').get((req,res) =>{
    const {username,password,newpassword} = req.headers;
-   User.updateOne({username: username,password: password },{password: newpassword},function(err,response) {
+   const hashedOldPassword = crypto.createHmac('sha256', "secret").update(password).digest('hex');
+   const hashedNewPassword = crypto.createHmac('sha256', "secret").update(newpassword).digest('hex');
+   User.updateOne({username: username,password: hashedOldPassword },{password: hashedNewPassword},function(err,response) {
      if(!err)
      {
        res.status(200).json("Success");

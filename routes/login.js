@@ -2,18 +2,20 @@ const router = require('express').Router();
 const User = require('../models/user.model');
 const Issue = require('../models/issue.model');
 const Faculty = require('../models/faculty.model')
+const crypto = require('crypto');
 
 router.route('/').get((req, res) => {
   const email  = req.headers.email;
   const password = req.headers.password;
   let finalObjectToReturn = {};
-
-User.find({$and: [{email:email}, {password:password}]},function(err,data){
+  const hashedPassword = crypto.createHmac('sha256', "secret").update(password).digest('hex');
+User.find({$and: [{email:email}, {password:hashedPassword}]},function(err,data){
     if(!err && data.length !==0)
     {
         finalObjectToReturn.facultyName = data[0].username;
         finalObjectToReturn.email = data[0].email;
-        finalObjectToReturn.password = data[0].password;
+        //finalObjectToReturn.password = data[0].password;
+        //finalObjectToReturn.password = crypto.createHmac('sha256', "secret").update(data[0].password).digest('hex');
         finalObjectToReturn.dashCode = data[0].dashCode;
 
         //get the department too
