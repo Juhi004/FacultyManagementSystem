@@ -7,6 +7,7 @@ const crypto = require('crypto');
 let sendMail = require('../sendMail.js');
 
 //This is for changing the password to a new updateOne
+//ignore: just checking
 //TODO : this already has a check for if username && password
 router.route('/changePassword').get((req,res) =>{
    const {username,password,newpassword} = req.headers;
